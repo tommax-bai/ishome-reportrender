@@ -1,0 +1,130 @@
+{
+ "verdict": "failed",
+ "domain": "lighting",
+ "cards": [],
+ "violations": [
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[0] 引用 lkp-cri-living-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-cri-living} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[0] 占位符未在 number_refs 声明：['lkp-cri-living-min']"
+  },
+  {
+   "check": "gate-banned-term",
+   "detail": "card[0] 命中禁词「依据」"
+  },
+  {
+   "check": "cr-methodology-language",
+   "detail": "card[0] 方法论元语言外泄（规则 4.15）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[1] 引用 lkp-accent-ratio-max 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-accent-ratio} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[1] 引用 lkp-accent-ratio-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-accent-ratio} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[1] 占位符未在 number_refs 声明：['lkp-accent-ratio-max', 'lkp-accent-ratio-min']"
+  },
+  {
+   "check": "gate-banned-term",
+   "detail": "card[1] 命中禁词「依据」"
+  },
+  {
+   "check": "cr-methodology-language",
+   "detail": "card[1] 方法论元语言外泄（规则 4.15）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[2] 引用 lkp-illuminance-bedroom-general 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[2] 占位符未在 number_refs 声明：['lkp-illuminance-bedroom-general']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[3] 引用 lkp-illuminance-dining-v 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[3] 占位符未在 number_refs 声明：['lkp-illuminance-dining-v']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[4] 引用 lkp-illuminance-bath-general 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[4] 引用 lkp-illuminance-bath-vanity 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[4] 占位符未在 number_refs 声明：['lkp-illuminance-bath-general', 'lkp-illuminance-bath-vanity']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[5] 引用 lkp-illuminance-kitchen-general 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[5] 引用 lkp-illuminance-kitchen-task 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[5] 占位符未在 number_refs 声明：['lkp-illuminance-kitchen-general', 'lkp-illuminance-kitchen-task']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[6] 引用 lkp-illuminance-corridor-v 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[6] 占位符未在 number_refs 声明：['lkp-illuminance-corridor-v']"
+  },
+  {
+   "check": "gate-banned-term",
+   "detail": "card[6] 命中禁词「可能」"
+  },
+  {
+   "check": "cr-weak-word",
+   "detail": "card[6] 分析级结论句禁弱词（规则 5.9）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[7] 引用 lkp-illuminance-living-general 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[7] 引用 lkp-illuminance-living-reading 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[7] 占位符未在 number_refs 声明：['lkp-illuminance-living-general', 'lkp-illuminance-living-reading']"
+  }
+ ],
+ "observations": [],
+ "judge_run": null,
+ "rewrites_used": 2,
+ "releases": [
+  {
+   "domain": "budget",
+   "release_tag": "budget@v7"
+  },
+  {
+   "domain": "ergonomics",
+   "release_tag": "ergonomics@v6"
+  },
+  {
+   "domain": "lighting",
+   "release_tag": "lighting@v7"
+  }
+ ],
+ "required_provenance": [],
+ "required_locked_texts": []
+}

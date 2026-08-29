@@ -1,0 +1,13 @@
+{
+ "verdict": "failed",
+ "violations": [
+  {
+   "check": "gate-domain-page-missing",
+   "detail": "budget 无页"
+  },
+  {
+   "check": "gate-domain-page-missing",
+   "detail": "lighting 无页"
+  }
+ ]
+}

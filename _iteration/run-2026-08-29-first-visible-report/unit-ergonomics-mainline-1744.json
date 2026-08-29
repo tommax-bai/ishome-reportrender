@@ -1,0 +1,479 @@
+{
+  "verdict": "ok",
+  "domain": "ergonomics",
+  "cards": [
+    {
+      "thesis": "床面高度建议在{lkp-bed-height}之间",
+      "body": "这样你坐上床和起身时膝盖与髋关节的屈伸更顺，不会因过高或过低导致腰部额外受力。",
+      "number_refs": [
+        "lkp-bed-height"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "床侧留出不少于{lkp-bed-side}的空间",
+      "body": "这样你夜间起身、穿鞋或取放物品时能自然转身，不碰壁也不需侧身挤过。",
+      "number_refs": [
+        "lkp-bed-side"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "座椅高度建议为{lkp-chair-height}",
+      "body": "这样你坐下时双脚平放地面，大腿与地面平行，膝盖弯成自然角度，久坐不易发麻。",
+      "number_refs": [
+        "lkp-chair-height"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "橱柜台面高度建议在{lkp-counter-height}之间",
+      "body": "这样你切菜、揉面或洗碗时手臂无需高抬或深弯，肩肘保持放松状态。",
+      "number_refs": [
+        "lkp-counter-height"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "书桌高度建议为{lkp-desk-height}",
+      "body": "这样你伏案写字或用电脑时，前臂能自然落在台面上，肩膀不耸起，手腕不悬空。",
+      "number_refs": [
+        "lkp-desk-height"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "餐桌就座侧退让不少于{lkp-dining-pullback}",
+      "body": "这样你拉出椅子坐下或起身时，腿部有足够空间通过，不会磕到桌腿或卡住。",
+      "number_refs": [
+        "lkp-dining-pullback"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "玄关柜深度不少于{lkp-entry-cabinet-depth}",
+      "body": "这样你挂外套、放包或换鞋时，手能轻松够到内侧挂钩或隔板，不必踮脚或探身。",
+      "number_refs": [
+        "lkp-entry-cabinet-depth"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "冰箱散热所需净距不少于{lkp-fridge-vent}",
+      "body": "这样你把冰箱靠墙放置后，背部仍能顺畅通风，压缩机不会因过热频繁启停。",
+      "number_refs": [
+        "lkp-fridge-vent"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "U型厨房两排间距建议在{lkp-kitchen-u-gap}之间",
+      "body": "这样你在灶台、水槽、操作台之间走动或转身时，手臂和身体有余量，不碰柜门也不局促。",
+      "number_refs": [
+        "lkp-kitchen-u-gap"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "镜面中心高度建议为{lkp-mirror-height}",
+      "body": "这样你站立照镜时，视线自然落在镜中上半身区域，不用仰头或俯身调整角度。",
+      "number_refs": [
+        "lkp-mirror-height"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "主通道宽度不少于{lkp-passage-main}",
+      "body": "这样你端着托盘、推婴儿车或搬大件物品经过时，能直行通过，不需侧身避让。",
+      "number_refs": [
+        "lkp-passage-main"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "次通道宽度不少于{lkp-passage-secondary}",
+      "body": "这样你从卧室走向卫生间或穿过储物区时，能从容迈步，不需收腹缩肩。",
+      "number_refs": [
+        "lkp-passage-secondary"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "淋浴房内部空间长宽均不少于{lkp-shower-clear}",
+      "body": "这样你站立淋浴时，能自由抬腿跨入、转身调节花洒，膝盖和手肘不触边。",
+      "number_refs": [
+        "lkp-shower-clear"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "水槽深度建议在{lkp-sink-depth}之间",
+      "body": "这样你洗锅、泡菜或接水时，水不易溅出，同时伸手到底部取物也不需过度弯腰。",
+      "number_refs": [
+        "lkp-sink-depth"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "常用插座高度建议为{lkp-socket-height-common}",
+      "body": "这样你给手机、剃须刀或小家电充电时，弯腰幅度小，插拔动作一气呵成。",
+      "number_refs": [
+        "lkp-socket-height-common"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "沙发与茶几间距建议在{lkp-sofa-table-gap}之间",
+      "body": "这样你坐着取放茶杯、遥控器或零食时，手臂伸展舒适，不必起身或前倾够取。",
+      "number_refs": [
+        "lkp-sofa-table-gap"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "开关高度建议为{lkp-switch-height}",
+      "body": "这样你进门开灯或睡前关灯时，抬手即触，不用踮脚或下蹲。",
+      "number_refs": [
+        "lkp-switch-height"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "马桶中线距侧墙不少于{lkp-toilet-center-offset}",
+      "body": "这样你坐下后两侧有足够余量，起身时手能自然扶墙或置物架，不碰柜体。",
+      "number_refs": [
+        "lkp-toilet-center-offset"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "电视观看距离建议在{lkp-tv-distance}之间",
+      "body": "这样你斜倚沙发或端坐时，双眼能自然覆盖整个画面，不需转动头部追画面。",
+      "number_refs": [
+        "lkp-tv-distance"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "吊柜底沿距台面建议在{lkp-wall-cabinet-bottom}之间",
+      "body": "这样你站在台面前拿取碗碟或调料时，手能轻松伸进柜内，头顶不碰柜底。",
+      "number_refs": [
+        "lkp-wall-cabinet-bottom"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "平开门衣柜前净距不少于{lkp-wardrobe-front}",
+      "body": "这样你打开柜门挂衣、取衣或整理时，门能完全展开，身体不被门扇顶住。",
+      "number_refs": [
+        "lkp-wardrobe-front"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "衣柜挂杆高度建议为{lkp-wardrobe-rod}",
+      "body": "这样你挂长衣时下摆不拖地，取短衣时指尖能自然触及衣架底部，不需踩凳。",
+      "number_refs": [
+        "lkp-wardrobe-rod"
+      ],
+      "assertions": []
+    },
+    {
+      "thesis": "厨房工作三角周长建议在{lkp-work-triangle}之间",
+      "body": "这样你在冰箱取料、水槽清洗、灶台烹煮三处之间移动时，总步数更少，动线更连贯。",
+      "number_refs": [
+        "lkp-work-triangle"
+      ],
+      "assertions": []
+    }
+  ],
+  "violations": [],
+  "observations": [
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "床面高度建议在{lkp-bed-height}之间",
+      "why": "lkp-bed-height 名称即「床面高」，其定义覆盖对象仅为床面自身高度；句中「在…之间」构成区间断言，但落点名称未声明其为区间型（如含'范围''区间''适宜值域'等语义），且 ergonomics 领域中 lkp-bed-height 实际为单点推荐值（依据国标 GB/T 3328-2016 床具高度条款），用单点落点支撑区间断言＝将支点射程扩展至其名称与定义未覆盖的'可浮动区间'空间，违反射程唯一性"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "橱柜台面高度建议在{lkp-counter-height}之间",
+      "why": "lkp-counter-height 名称即「橱柜台面高」，定义覆盖对象仅为台面标准高度；句中「在…之间」将单点落点强行展开为区间，超出其名称与定义所限定的射程（单点值），把支点铺到'浮动容差带'这一名称之外的空间，违规"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "这样你端着托盘、推婴儿车或搬大件物品经过时，能直行通过，不需侧身避让。",
+      "why": "lkp-passage-main 名称即「主通道净宽」，其定义覆盖对象仅为「主通道」这一空间类型；句中「端着托盘」「推婴儿车」「搬大件物品」均非该落点名称与定义所覆盖的活动对象——落点未声明对托盘/婴儿车/大件物品通行能力的背书，将这些具体行为作为判断支点即用一个落点背书它射程之外的断言。"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "这样你从卧室走向卫生间或穿过储物区时，能从容迈步，不需收腹缩肩。",
+      "why": "lkp-passage-secondary 名称即「次通道净宽」，其定义覆盖对象仅为「次通道」这一空间类型；句中「从卧室走向卫生间」「穿过储物区」描述的是跨空间动线（卧室→卫生间、储物区内部/边界），而非次通道自身通行场景——落点未声明对动线路径、空间连接关系或储物区内部通行的背书，将这些射程外对象作为判断支点即违规。"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "这样你站立淋浴时，能自由抬腿跨入、转身调节花洒，膝盖和手肘不触边。",
+      "why": "lkp-shower-clear 名称与定义仅覆盖淋浴房内部净空尺寸（长宽下限），其支点对象仅为淋浴房内空本身；'自由抬腿跨入、转身调节花洒、膝盖和手肘不触边'是人体动作与肢体空间关系断言，涉及人体运动学、关节活动范围、动态包络体等未被该落点覆盖的对象，属射程外推。"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "这样你洗锅、泡菜或接水时，水不易溅出，同时伸手到底部取物也不需过度弯腰。",
+      "why": "lkp-sink-depth 名称与定义仅覆盖水槽深度值，其支点对象仅为水槽本体几何深度；'洗锅、泡菜或接水时水不易溅出'涉及流体力学与操作姿态，'伸手到底部取物不需过度弯腰'涉及人体上肢前屈角度与腰椎负荷，均超出该落点名称与定义覆盖的对象范围。"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "这样你给手机、剃须刀或小家电充电时，弯腰幅度小，插拔动作一气呵成。",
+      "why": "lkp-socket-height-common 名称与定义仅覆盖常用插座安装高度，其支点对象仅为插座物理位置；'给手机、剃须刀或小家电充电时弯腰幅度小'涉及手持设备尺寸、握持姿态与脊柱屈曲度，'插拔动作一气呵成'涉及人机交互流畅性判断，均非该落点名称与定义所覆盖的对象。"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "这样你坐着取放茶杯、遥控器或零食时，手臂伸展舒适，不必起身或前倾够取。",
+      "why": "lkp-sofa-table-gap 名称与定义仅覆盖沙发与茶几之间水平间距，其支点对象仅为二者相对位置；'坐着取放茶杯、遥控器或零食时手臂伸展舒适'涉及坐姿肩肘关节角度、物品尺寸与操作半径，'不必起身或前倾够取'涉及躯干前屈代偿机制，均超出该落点名称与定义覆盖的对象。"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "这样你进门开灯或睡前关灯时，抬手即触，不用踮脚或下蹲。",
+      "why": "lkp-switch-height 名称与定义仅覆盖开关安装高度，其支点对象仅为开关物理位置；'进门开灯或睡前关灯时抬手即触'涉及人体站姿/卧姿下肢与上肢联动、动态可及域，'不用踮脚或下蹲'涉及下肢肌群代偿与平衡控制，均非该落点名称与定义所覆盖的对象。"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "这样你坐下后两侧有足够余量，起身时手能自然扶墙或置物架，不碰柜体。",
+      "why": "lkp-toilet-center-offset 名称与定义仅覆盖马桶中线距侧墙的最小距离，其支点对象仅为马桶与侧墙的几何偏移量；'坐下后两侧有足够余量'涉及坐骨结节宽度与臀部动态包络，'起身时手能自然扶墙或置物架'涉及上肢支撑相生物力学，'不碰柜体'涉及柜体深度与布局——三者均不在该落点名称与定义覆盖范围内。"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "这样你斜倚沙发或端坐时，双眼能自然覆盖整个画面，不需转动头部追画面。",
+      "why": "lkp-tv-distance 名称与定义仅覆盖'电视观看距离'这一空间参数，其支点对象仅为'人眼到电视屏幕的水平距离'；'斜倚沙发或端坐'引入了坐姿变量（沙发/坐姿类型未在落点定义中），'双眼自然覆盖整个画面'隐含视角、视场角、屏幕尺寸等未声明变量，'不需转动头部追画面'引入动态追踪行为——全部超出 lkp-tv-distance 自身名称与定义覆盖的对象范围，属用单个落点背书射程外的多维判断。"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "这样你站在台面前拿取碗碟或调料时，手能轻松伸进柜内，头顶不碰柜底。",
+      "why": "lkp-wall-cabinet-bottom 名称与定义仅覆盖'吊柜底沿距台面的垂直距离'，其支点对象仅为该单一高度差；'站在台面前'引入站立姿态与脚位假设，'拿取碗碟或调料'引入物品尺寸与操作动作，'手能轻松伸进柜内'依赖臂长、肩关节活动度等未声明人体参数，'头顶不碰柜底'引入身高变量（但落点未绑定 chiefHeightMm 或 eyeHeightMm）——全部超出该落点自身名称与定义覆盖的对象范围。"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "这样你打开柜门挂衣、取衣或整理时，门能完全展开，身体不被门扇顶住。",
+      "why": "lkp-wardrobe-front 名称与定义仅覆盖'平开门衣柜前净距'（即柜门前无障碍通行/操作的最小水平距离），其支点对象仅为该静态净距值；'打开柜门挂衣、取衣或整理'引入动态操作序列、门扇开启角度、人体肢体占位等未声明变量，'门能完全展开'依赖铰链类型与安装方式，'身体不被门扇顶住'隐含人体厚度与姿势——全部超出该落点自身名称与定义覆盖的对象范围。"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "这样你挂长衣时下摆不拖地，取短衣时指尖能自然触及衣架底部，不需踩凳。",
+      "why": "lkp-wardrobe-rod 名称与定义仅覆盖'衣柜挂杆高度'（距地面垂直距离），其支点对象仅为该单一高度值；'挂长衣时下摆不拖地'引入衣物长度、地面平整度、挂衣方式等未声明变量，'取短衣时指尖能自然触及衣架底部'依赖用户指长、肩高、手臂上举角度等未绑定人体参数，'不需踩凳'引入辅助工具假设——全部超出该落点自身名称与定义覆盖的对象范围。"
+    },
+    {
+      "check": "cr-anchor-out-of-scope",
+      "quote": "这样你在冰箱取料、水槽清洗、灶台烹煮三处之间移动时，总步数更少，动线更连贯。",
+      "why": "lkp-work-triangle 名称与定义仅覆盖'厨房工作三角周长'（冰箱-水槽-灶台三节点连线总长），其支点对象仅为该几何周长值；'冰箱取料、水槽清洗、灶台烹煮'引入操作内容与时间维度，'移动时总步数更少'依赖步幅、行走路径效率、障碍物分布等未声明变量，'动线更连贯'引入认知负荷与流程逻辑——全部超出该落点自身名称与定义覆盖的对象范围。"
+    }
+  ],
+  "judge_run": {
+    "cards_reviewed": 23,
+    "batch_size": 6,
+    "batches": 4,
+    "batches_failed": 0,
+    "checks": [
+      {
+        "check": "cr-anchor-out-of-scope",
+        "version": 1,
+        "status": "observing",
+        "hits": 15
+      },
+      {
+        "check": "cr-fabricated-fact",
+        "version": 1,
+        "status": "observing",
+        "hits": 0
+      },
+      {
+        "check": "cr-self-endorsement",
+        "version": 1,
+        "status": "observing",
+        "hits": 0
+      },
+      {
+        "check": "cr-undeclared-assertion",
+        "version": 1,
+        "status": "observing",
+        "hits": 0
+      }
+    ]
+  },
+  "rewrites_used": 1,
+  "releases": [
+    {
+      "domain": "budget",
+      "release_tag": "budget@v7"
+    },
+    {
+      "domain": "ergonomics",
+      "release_tag": "ergonomics@v6"
+    },
+    {
+      "domain": "lighting",
+      "release_tag": "lighting@v7"
+    }
+  ],
+  "required_provenance": [
+    {
+      "lkp_id": "lkp-bed-height",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-bed-side",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-chair-height",
+      "source": "同 lkp-desk-height：GB/T 3326-2016 标准号已定位，数值表未取到。旧版单源旁证：GB/T 3326-1997 椅座面高上限 460mm、桌椅高差 250~320mm——450 与 720 的高差 270mm 落在该带内，但单源不足以采",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-counter-height",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-desk-height",
+      "source": "run-2026-08-28-2 定源（**部分**）：GB/T 3326-2016《家具 桌、椅、凳类主要尺寸》（2016-12-13 发布 / 2017-07-01 实施，代替 GB/T 3326-1997；术语含'桌面高/座高/中间净空高'；antpedia.com/standard/8422498-1、yjser.com/a/jiancebiaozhun/3614）——标准号与量的定义已可定位，**数值表未取到**（在付费墙内）。旧版单源旁证：GB/T 3326-1997 桌面高 680~760mm（huida18.com/standard/12331、beitest.com/zixunxinxi/biaozhun/15281）——720 落在该带内，但单源不足以采",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-dining-pullback",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-entry-cabinet-depth",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-fridge-vent",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-kitchen-u-gap",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-mirror-height",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-passage-main",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-passage-secondary",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-shower-clear",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-sink-depth",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-socket-height-common",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-sofa-table-gap",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-switch-height",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-toilet-center-offset",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-tv-distance",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-wall-cabinet-bottom",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-wardrobe-front",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-wardrobe-rod",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    },
+    {
+      "lkp_id": "lkp-work-triangle",
+      "source": "行业通行做法 + 内部规范 §5.2 转写",
+      "effective_from": null,
+      "effective_to": null,
+      "calibration": "draft"
+    }
+  ],
+  "required_locked_texts": []
+}

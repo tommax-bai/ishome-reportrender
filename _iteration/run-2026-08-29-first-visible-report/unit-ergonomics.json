@@ -1,0 +1,294 @@
+{
+ "verdict": "failed",
+ "domain": "ergonomics",
+ "cards": [],
+ "violations": [
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[0] 引用 lkp-bed-height-max 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-bed-height} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[0] 引用 lkp-bed-height-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-bed-height} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[0] 占位符未在 number_refs 声明：['lkp-bed-height-max', 'lkp-bed-height-min']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[1] 引用 lkp-bed-side-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-bed-side} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[1] 占位符未在 number_refs 声明：['lkp-bed-side-min']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[2] 引用 lkp-chair-height-v 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[2] 占位符未在 number_refs 声明：['lkp-chair-height-v']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[3] 引用 lkp-counter-height-max 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-counter-height} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[3] 引用 lkp-counter-height-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-counter-height} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[3] 占位符未在 number_refs 声明：['lkp-counter-height-max', 'lkp-counter-height-min']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[4] 引用 lkp-desk-height-v 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[4] 占位符未在 number_refs 声明：['lkp-desk-height-v']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[5] 引用 lkp-dining-pullback-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-dining-pullback} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[5] 占位符未在 number_refs 声明：['lkp-dining-pullback-min']"
+  },
+  {
+   "check": "gate-digit-outside-ref",
+   "detail": "card[5] 正文出现裸数字（数字只能经 {lkp-*} 占位引用落点对象）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[6] 引用 lkp-entry-cabinet-depth-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-entry-cabinet-depth} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[6] 占位符未在 number_refs 声明：['lkp-entry-cabinet-depth-min']"
+  },
+  {
+   "check": "gate-digit-outside-ref",
+   "detail": "card[6] 正文出现裸数字（数字只能经 {lkp-*} 占位引用落点对象）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[7] 引用 lkp-fridge-vent-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-fridge-vent} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[7] 占位符未在 number_refs 声明：['lkp-fridge-vent-min']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[8] 引用 lkp-kitchen-u-gap-max 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-kitchen-u-gap} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[8] 引用 lkp-kitchen-u-gap-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-kitchen-u-gap} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[8] 占位符未在 number_refs 声明：['lkp-kitchen-u-gap-max', 'lkp-kitchen-u-gap-min']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[9] 引用 lkp-mirror-height-v 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[9] 占位符未在 number_refs 声明：['lkp-mirror-height-v']"
+  },
+  {
+   "check": "gate-digit-outside-ref",
+   "detail": "card[9] 正文出现裸数字（数字只能经 {lkp-*} 占位引用落点对象）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[10] 引用 lkp-passage-main-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-passage-main} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[10] 占位符未在 number_refs 声明：['lkp-passage-main-min']"
+  },
+  {
+   "check": "gate-digit-outside-ref",
+   "detail": "card[10] 正文出现裸数字（数字只能经 {lkp-*} 占位引用落点对象）"
+  },
+  {
+   "check": "gate-banned-term",
+   "detail": "card[10] 命中禁词「净宽」"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[11] 引用 lkp-passage-secondary-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-passage-secondary} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[11] 占位符未在 number_refs 声明：['lkp-passage-secondary-min']"
+  },
+  {
+   "check": "gate-banned-term",
+   "detail": "card[11] 命中禁词「净宽」"
+  },
+  {
+   "check": "gate-digit-outside-ref",
+   "detail": "card[12] 正文出现裸数字（数字只能经 {lkp-*} 占位引用落点对象）"
+  },
+  {
+   "check": "gate-lkp-identifier-leak",
+   "detail": "card[12] 正文出现裸 lkp- 标识名——内部落点编号不进客户语域；要引用数字写 {lkp-id} 占位，要说这条没背书就用人话说"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[13] 引用 lkp-sink-depth-max 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-sink-depth} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[13] 引用 lkp-sink-depth-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-sink-depth} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[13] 占位符未在 number_refs 声明：['lkp-sink-depth-max', 'lkp-sink-depth-min']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[14] 引用 lkp-socket-height-common-v 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[14] 占位符未在 number_refs 声明：['lkp-socket-height-common-v']"
+  },
+  {
+   "check": "gate-digit-outside-ref",
+   "detail": "card[14] 正文出现裸数字（数字只能经 {lkp-*} 占位引用落点对象）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[15] 引用 lkp-sofa-table-gap-max 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-sofa-table-gap} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[15] 引用 lkp-sofa-table-gap-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-sofa-table-gap} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[15] 占位符未在 number_refs 声明：['lkp-sofa-table-gap-max', 'lkp-sofa-table-gap-min']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[16] 引用 lkp-switch-height-v 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[16] 占位符未在 number_refs 声明：['lkp-switch-height-v']"
+  },
+  {
+   "check": "gate-digit-outside-ref",
+   "detail": "card[16] 正文出现裸数字（数字只能经 {lkp-*} 占位引用落点对象）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[17] 引用 lkp-toilet-center-offset-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-toilet-center-offset} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[17] 占位符未在 number_refs 声明：['lkp-toilet-center-offset-min']"
+  },
+  {
+   "check": "gate-banned-term",
+   "detail": "card[17] 命中禁词「舒适区」"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[18] 引用 lkp-tv-distance-max 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-tv-distance} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[18] 引用 lkp-tv-distance-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-tv-distance} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[18] 占位符未在 number_refs 声明：['lkp-tv-distance-max', 'lkp-tv-distance-min']"
+  },
+  {
+   "check": "gate-banned-term",
+   "detail": "card[18] 命中禁词「依据」"
+  },
+  {
+   "check": "cr-methodology-language",
+   "detail": "card[18] 方法论元语言外泄（规则 4.15）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[19] 引用 lkp-wall-cabinet-bottom-max 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-wall-cabinet-bottom} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[19] 引用 lkp-wall-cabinet-bottom-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-wall-cabinet-bottom} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[19] 占位符未在 number_refs 声明：['lkp-wall-cabinet-bottom-max', 'lkp-wall-cabinet-bottom-min']"
+  },
+  {
+   "check": "gate-digit-outside-ref",
+   "detail": "card[19] 正文出现裸数字（数字只能经 {lkp-*} 占位引用落点对象）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[20] 引用 lkp-wardrobe-front-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-wardrobe-front} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[20] 占位符未在 number_refs 声明：['lkp-wardrobe-front-min']"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[21] 引用 lkp-wardrobe-rod-v 不在本域落点对象内（数字只能引用求值线产出）"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[21] 占位符未在 number_refs 声明：['lkp-wardrobe-rod-v']"
+  },
+  {
+   "check": "gate-digit-outside-ref",
+   "detail": "card[21] 正文出现裸数字（数字只能经 {lkp-*} 占位引用落点对象）"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[22] 引用 lkp-work-triangle-max 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-work-triangle} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-unresolved",
+   "detail": "card[22] 引用 lkp-work-triangle-min 不在本域落点对象内——占位符代表整条落点，区间写 {lkp-work-triangle} 即可，拆 min/max 会丢掉另一端"
+  },
+  {
+   "check": "gate-number-ref-undeclared",
+   "detail": "card[22] 占位符未在 number_refs 声明：['lkp-work-triangle-max', 'lkp-work-triangle-min']"
+  }
+ ],
+ "observations": [],
+ "judge_run": null,
+ "rewrites_used": 2,
+ "releases": [
+  {
+   "domain": "budget",
+   "release_tag": "budget@v7"
+  },
+  {
+   "domain": "ergonomics",
+   "release_tag": "ergonomics@v6"
+  },
+  {
+   "domain": "lighting",
+   "release_tag": "lighting@v7"
+  }
+ ],
+ "required_provenance": [],
+ "required_locked_texts": []
+}

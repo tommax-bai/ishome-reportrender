@@ -34,9 +34,12 @@ _CALIBRATION_LABELS = {
     "needs_review": "待复核",
 }
 
-# 经验条目（source=None）的说明口径——该说明话术已建议注册为锁定文案 ID、同批走法务
-# （交接文档"依据标注渲染"事项）：落表前按交接口径用占位样式呈现并标待定稿，禁编造来源。
-_EXPERIENCE_SOURCE_TEXT = "经验判断，无外部标准背书"
+# 来源列**整列待裁**（2026-08-29 真跑立案）：provenance.source 现状是获取回路的审计叙事
+# （含内部落点编号、方法论语言、旁证推理），语域不适合逐字上纸；渲染层禁改写、禁静默逐条取舍，
+# 故页脚暂只渲三项纯结构化事实（名称/取数时间/校准状态），来源的上纸形态等裁决
+# （候选：获取侧拆 citation 与 audit_note 两字段改源）。经验条目"经验判断、无外部标准背书"
+# 的说明话术随来源列一并待裁（原设计挂在来源列上）。立案明细见
+# _iteration/run-2026-08-29-first-visible-report/。
 
 _CSS = """
 @page { size: A4; margin: 18mm; }
@@ -89,11 +92,7 @@ def _provenance_line(note: ProvenanceNote, anchors_by_id: dict[str, ReportAnchor
     label = _CALIBRATION_LABELS.get(note.calibration)
     if label is None:
         raise RenderError([f"落点 {note.lkp_id} 校准状态不认识：{note.calibration!r}"])
-    if note.source is not None:
-        source_html = f"依据：{_esc(note.source)}"
-    else:
-        source_html = f'<span class="pending">{_EXPERIENCE_SOURCE_TEXT}（说明话术待定稿）</span>'
-    parts = [f"<strong>{_esc(anchor.name)}</strong>", source_html]
+    parts = [f"<strong>{_esc(anchor.name)}</strong>"]
     if note.effective_from or note.effective_to:
         span = f"{note.effective_from or '—'} 至 {note.effective_to or '长期'}"
         parts.append(f"取数时间：{_esc(span)}")

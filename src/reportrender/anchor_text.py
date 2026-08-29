@@ -6,11 +6,13 @@
 - 一个占位符 = 整条落点：区间渲染成区间，不取中值、不挑一头。
 - **fail loud**：占位符找不到落点、值形态不认识 → 抛 :class:`RenderError` 并报明细，
   不空替、不静默跳过（静默丢内容是漏拦的一种）。
-- 首版只认三形态：``{min,max}`` 区间 / ``{v}`` 点值 / 单边界（只 min 或只 max）。
-  其余形态（分档映射、嵌套结构）的呈现是设计题不是替换题，遇到即失败上报待裁，不猜。
+- 认识的形态逐个登记，登记不到的（分档映射、嵌套结构）呈现是设计题不是替换题，
+  遇到即失败上报待裁，不猜。已登记四形态：``{min,max}`` 区间 / ``{v}`` 点值 /
+  单边界（只 min 或只 max）/ **带轴单边界**（``min_w``/``min_d``，轴含义出自种子资产
+  定义——如"淋浴房内空"的宽、深两轴下限；backend 侧对该形态的既有称呼是"前缀边界"）。
 
 单边界的措辞定为"不低于/不超过"（渲染的是边界语义，不是造数字）——这是首版的呈现选择，
-记录在交接文档追记，用户可改判。
+记录在交接文档追记，用户可改判；带轴形态沿用同款措辞、逐轴出、单位各带。
 """
 
 from __future__ import annotations
@@ -22,6 +24,13 @@ from reportrender.models import ReportAnchor
 PLACEHOLDER_RE = re.compile(r"\{(lkp-[a-z0-9-]+)\}")
 
 _ALLOWED_VALUE_KEYS = {"min", "max", "v"}
+
+# 带轴单边界（"前缀边界"）：键 → (轴展示名, 边界措辞)。只登记真源里出现过的键，
+# 新轴（如高度）出现时先进表再渲——表外键 fail loud，与其他未知形态同路。
+_AXIS_BOUND_KEYS = {
+    "min_w": ("宽", "不低于"),
+    "min_d": ("深", "不低于"),
+}
 
 
 class RenderError(Exception):
@@ -40,13 +49,21 @@ def _fmt_num(x: object, lkp_id: str) -> str:
 
 
 def format_anchor_value(anchor: ReportAnchor) -> str:
-    """落点值 → 客户可读文字（含单位）。三形态之外一律 fail loud。"""
+    """落点值 → 客户可读文字（含单位）。已登记形态之外一律 fail loud。"""
     keys = set(anchor.value)
+    if keys and keys <= _AXIS_BOUND_KEYS.keys():
+        unit = f" {anchor.unit}" if anchor.unit else ""
+        parts = [
+            f"{axis}{phrase} {_fmt_num(anchor.value[key], anchor.lkp_id)}{unit}"
+            for key, (axis, phrase) in _AXIS_BOUND_KEYS.items()
+            if key in keys
+        ]
+        return "、".join(parts)
     if not keys or not keys <= _ALLOWED_VALUE_KEYS:
         raise RenderError(
             [
                 f"落点 {anchor.lkp_id} 值形态不认识（键：{sorted(keys)}）——"
-                "首版只认 {min,max}/{v}/单边界，其余上报待裁，不猜"
+                "只渲登记过的形态，其余上报待裁，不猜"
             ]
         )
     v = anchor.value

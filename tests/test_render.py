@@ -55,13 +55,15 @@ def test_locked_text_verbatim_and_absence() -> None:
     assert "DISCLAIM_PRICE" not in result.html
 
 
-def test_provenance_footer_joins_name_and_states_experience() -> None:
+def test_provenance_footer_structured_fields_only() -> None:
     html = _render().html
     assert "本页依据" in html
     assert "橱柜台面高" in html  # 名称从数据包 join，不打印 lkp_id
-    assert "经验判断，无外部标准背书" in html  # source=None 是事实：禁编造来源
-    assert "已校准" in html
+    assert "已校准" in html and "未校准" in html
     assert "2026-08-27 至 2026-11-27" in html  # 取数时间原样出（时效资产）
+    # 来源列整列待裁（真跑立案：source 是审计叙事非客户引文），暂不上纸
+    assert "行业通行" not in html
+    assert "市场行情采集" not in html
 
 
 def test_note_referencing_unknown_anchor_fails() -> None:

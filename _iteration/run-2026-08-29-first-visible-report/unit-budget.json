@@ -1,0 +1,38 @@
+{
+ "verdict": "failed",
+ "domain": "budget",
+ "cards": [],
+ "violations": [
+  {
+   "check": "gate-lkp-identifier-leak",
+   "detail": "card[0] 正文出现裸 lkp- 标识名——内部落点编号不进客户语域；要引用数字写 {lkp-id} 占位，要说这条没背书就用人话说"
+  },
+  {
+   "check": "gate-banned-term",
+   "detail": "card[0] 命中禁词「依据」"
+  },
+  {
+   "check": "cr-methodology-language",
+   "detail": "card[0] 方法论元语言外泄（规则 4.15）"
+  }
+ ],
+ "observations": [],
+ "judge_run": null,
+ "rewrites_used": 2,
+ "releases": [
+  {
+   "domain": "budget",
+   "release_tag": "budget@v7"
+  },
+  {
+   "domain": "ergonomics",
+   "release_tag": "ergonomics@v6"
+  },
+  {
+   "domain": "lighting",
+   "release_tag": "lighting@v7"
+  }
+ ],
+ "required_provenance": [],
+ "required_locked_texts": []
+}
