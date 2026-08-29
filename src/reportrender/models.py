@@ -149,15 +149,20 @@ def parse_pages(data: Any) -> list[Page]:
 
 
 def parse_locked_texts(data: Any) -> dict[str, str]:
-    """锁定文案数据解析：``{ID: 正文}`` 平面映射。
+    """锁定文案数据解析。
 
-    缺 ID = 该文案待补录（注册表状态），渲染时**缺席并记录**——缺是少说，编是替企业作
-    错误承诺；这里不做任何默认值、拼接或占位正文。
+    认 contracts ``registries/locked_texts.json`` 的形态（``{"texts": {ID: 正文|null}}``），
+    也认裸 ``{ID: 正文}`` 映射。``null`` 与缺 ID 同义 = 正文待补录，渲染时**缺席并记录**——
+    缺是少说，编是替企业作错误承诺；这里不做任何默认值、拼接或占位正文。
     """
+    if isinstance(data, dict) and isinstance(data.get("texts"), dict):
+        data = data["texts"]
     if not isinstance(data, dict):
-        raise ValueError("锁定文案数据须为 {ID: 正文} 映射")
+        raise ValueError("锁定文案数据须为 {ID: 正文} 映射或含 texts 键的对象")
     out: dict[str, str] = {}
     for key, value in data.items():
+        if key == "$comment" or value is None:
+            continue
         if not isinstance(key, str) or not isinstance(value, str):
             raise ValueError(f"锁定文案条目形态非法：{key!r}")
         out[key] = value
