@@ -1,18 +1,24 @@
 [project]
 name = "reportrender"
 version = "0.1.0"
-description = "报告渲染层：pages + 报告数据包 → 单册自包含 HTML。确定性、零 LLM——gen-locked 的执行者，不是生成者（裁决 2026-08-29：独立仓，纯库+CLI 先行，后续报告产出上线时建立服务）"
+description = "报告渲染层：pages + 报告数据包 → 单册自包含 HTML → 私有对象存储。确定性、零 LLM——gen-locked 的执行者，不是生成者（裁决 2026-08-29 的后半段已兑现：报告产出上线，服务已建立，队列 reportrender-activities）"
 requires-python = ">=3.12"
 dependencies = [
   "pydantic>=2.9",
+  "temporalio>=1.8",  # 出册 activity（report-book-render，队列 reportrender-activities）
+  "oss2>=2.18",       # 私有对象存储：册要在业主手机上打开，签名链接由 OSS 域名直接对外
 ]
 
 # 暂不依赖 ishome-contracts：git dep 的 tag 引用只带 gen/python 生成代码，而渲染层要消费的
 # 锁定文案数据文件将落在 contracts 注册表目录（不编进生成代码——编进去等于把"写作层结构性
 # 拿不到正文"改成拿得到，见交接文档追记二）。取用形态等该数据文件落地时定，此刻加依赖是死重。
 
+# 纵切入口：`uv run reportrender-worker` 起 activity worker（监听 reportrender-activities）
+# 工具入口：`uv run reportrender --pages … -o book.html` 本地出册（改样式、看一册长什么样走它，
+#           不必起 Temporal，也不碰对象存储）
 [project.scripts]
 reportrender = "reportrender.cli:main"
+reportrender-worker = "reportrender.worker:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -27,6 +33,7 @@ dev = [
   "mypy>=1.13",
   "import-linter>=2.1",
   "pytest>=8.3",
+  "pytest-asyncio>=0.24",  # 出册 activity 是 async（Temporal 口径），同 reportgen
 ]
 
 # ---------------------------------------------------------------------------
@@ -47,11 +54,17 @@ strict = true
 python_version = "3.12"
 files = ["src", "tests"]
 
+# oss2 不带 py.typed（阿里云 OSS SDK）；定向忽略，勿扩大范围
+[[tool.mypy.overrides]]
+module = ["oss2", "oss2.*"]
+ignore_missing_imports = true
+
 # ---------------------------------------------------------------------------
 # pytest
 # ---------------------------------------------------------------------------
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+asyncio_mode = "auto"
 
 # ---------------------------------------------------------------------------
 # import-linter：模块依赖方向契约（违规挂质量门）。
@@ -62,7 +75,30 @@ root_packages = ["reportrender"]
 include_external_packages = true
 
 [[tool.importlinter.contracts]]
-name = "cli → render → anchor_text → models 单向"
+name = "worker|cli → activities → render → anchor_text → models 单向"
 type = "layers"
-layers = ["cli", "render", "anchor_text", "models"]
+# 两个入口同层且互不可见（"|" = independent siblings）：`worker` 是 Temporal 入口，
+# `cli` 是本地出册工具。**cli 不许经 activities**——它是不碰对象存储的那条路，
+# 从它能看见 activities 起，"本地改样式不需要凭证"就只是一句承诺而不是结构。
+layers = [
+  "worker | cli",
+  "activities",
+  "render",
+  "anchor_text",
+  "models",
+]
 containers = ["reportrender"]
+
+[[tool.importlinter.contracts]]
+name = "出站边缘 book_store 不感知上层：只依赖运行库——写册的那只手看不见册里写了什么"
+type = "forbidden"
+source_modules = ["reportrender.book_store"]
+forbidden_modules = [
+  "reportrender.models",
+  "reportrender.anchor_text",
+  "reportrender.render",
+  "reportrender.activities",
+  "reportrender.cli",
+  "reportrender.worker",
+  "temporalio",
+]

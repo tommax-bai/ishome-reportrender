@@ -3,9 +3,14 @@
 报告渲染层：把成文线产出的 **pages** 与求值线产出的**报告数据包**渲染成一册**自包含 HTML**
 （可打印 A4；PDF 走浏览器打印）。
 
-**形态（裁决 2026-08-29）**：不成服务，以工具（纯库 + CLI）形式存在，后续报告产出上线
-（"报告一键触发"接进编排）时建立服务——届时包一层 Temporal worker（activity
-`report-book-render`，队列 `reportrender-activities`，注册走 contracts PR）。
+**形态（裁决 2026-08-29 → 2026-08-30 晚兑现后半段）**：原口径是"不成服务，以工具形式存在，
+**后续报告产出上线时建立服务**"。**触发条件已到**（用户 2026-08-30 晚定"尽快让真人用上"，
+报告要交到业主手上），服务已建立：Temporal worker 监听 `reportrender-activities`，
+承接 activity `report-book-render`（contracts 注册表 #14）。
+
+**CLI 不废**：它是本地迭代的入口——改样式、看一册长什么样走它，不必起 Temporal，也不碰对象存储。
+两条路的分界由 import-linter 锁死（`cli` 看不见 `activities`）：从它能看见起，
+"本地改样式不需要凭证"就只是一句承诺而不是结构。
 
 ## 用法
 
@@ -21,6 +26,24 @@ uv run reportrender --pages pages.json --package package.json \
   （分场景/分项）并列多项时的**展示名**。缺省=空表，这两类的整条引用即 fail loud。
   **展示名不在本层存**：它是词表的一列，本层再存一份就是同一条词表两处各写一遍，源侧长出新词而
   这边忘了改、整册当场渲不出来。闭集两类（档位 低/中/高、维度 宽/深/高）由规范定死，留在本层代码里。
+
+## 出册服务（`reportrender-worker`）
+
+```bash
+set -a; source ~/.ishome/oss-local.env; set +a          # 私有桶凭证，不入库
+export ISHOME_CONTRACTS_REGISTRIES_DIR=~/codes/ishome-contracts/registries
+uv run reportrender-worker                              # 监听 reportrender-activities
+```
+
+- **册写进私有对象存储**（阿里云 OSS 私有桶，用户裁决 2026-08-30 晚），键由 `report_id`
+  确定性推得：`reports/{report_id}/book.html`（唯一真源 contracts `registries/object_keys.md`）。
+  因此"这份报告出没出册"**问存储即知，不另立台账**——台账会与真相漂移，派生不会；
+- **只写不签**。签名是"给谁看、看多久"的事，属业务侧（project-svc `GET /api/v1/reports/{id}/link`）
+  ——生成侧不知用户是谁；
+- **两份词表从 contracts 注册表目录读，本仓不留副本**，进程起来时装好并当场校验：
+  缺配置要在 worker 起不来的时候就知道，不是等第一份报告渲完才发现册存不进去；
+- **写不进去就不是 ok**：册渲得再好、落不了地也按失败回报——回一个指向空气的键，
+  业务侧会去签一条打不开的链接发给业主，那是这条线最贵的失效形态。
 
 ## 红线（违反即返工，全文见中控仓《交接文档-报告渲染启动.md》§三）
 
