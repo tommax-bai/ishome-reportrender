@@ -48,6 +48,14 @@ def test_reference_plane_stays_off_paper() -> None:
     assert "0.75m 水平面" not in _render().html
 
 
+def test_book_is_readable_on_a_phone() -> None:
+    # 业主在 IM 里点开链接，第一现场是手机：缺 viewport 声明则整页按 980px 版面缩放，
+    # 11pt 正文缩到看不清；屏幕侧还要有自己的留白，否则正文顶着屏幕边缘。
+    html = _render().html
+    assert '<meta name="viewport" content="width=device-width, initial-scale=1">' in html
+    assert "@media screen" in html
+
+
 def test_no_internal_ids_in_output() -> None:
     assert "lkp-" not in _render().html
 

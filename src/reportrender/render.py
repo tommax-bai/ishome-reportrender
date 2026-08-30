@@ -63,6 +63,17 @@ body { font-family: "Songti SC", "Noto Serif CJK SC", serif; color: #1a1a1a;
 .provenance h4 { margin: 0 0 1mm; font-size: 9.5pt; }
 .provenance ul { margin: 0; padding-left: 5mm; }
 .pending { background: #f2f2f2; border-bottom: 1px dotted #999; }
+
+/* 业主的第一现场是手机——链接在 IM 里点开，不是打印出来读。上面那套是纸面参数
+   （mm 留白、pt 字号、A4 分页），只在打印时成立；屏幕上另给一套留白与字号。
+   与之配套的 viewport 声明在 <head> 里：缺了它手机按 980px 版面整页缩放，11pt 正文
+   缩到看不清，别的都白做。 */
+@media screen {
+  .sheet { padding: 8mm 5mm; }
+  .cover { padding-top: 24mm; }
+  .toc ol, .card p { font-size: 12pt; }
+  .card h3 { font-size: 13pt; }
+}
 """
 
 
@@ -166,6 +177,8 @@ def render_book(
     doc = (
         "<!doctype html>\n"
         '<html lang="zh-CN"><head><meta charset="utf-8">'
+        # 手机上按设备宽度排版：缺这一行，屏幕侧那套样式再对也生效不了。
+        '<meta name="viewport" content="width=device-width, initial-scale=1">'
         "<title>装修设计报告</title>"
         f"<style>{_CSS}</style></head><body>\n"
         f'<section class="sheet cover"><h1>装修设计报告</h1>{meta}</section>\n'
