@@ -1,74 +1,182 @@
-"""占位符替换红线：三形态各渲各样、之外 fail loud、数字原样不换算。"""
+"""记号替换红线：七类 valueKind 各渲各样、单项引用只出值、之外 fail loud、数字原样不换算。"""
 
 from __future__ import annotations
 
 import copy
+from typing import Any
 
 import pytest
 
-from reportrender.anchor_text import RenderError, format_anchor_value, replace_placeholders
-from reportrender.models import RenderPackage
-from tests.support import PACKAGE_JSON
+from reportrender.anchor_text import (
+    RenderError,
+    format_anchor_item,
+    format_anchor_value,
+    replace_placeholders,
+)
+from reportrender.models import RenderPackage, ReportAnchor
+from tests.support import ITEM_LABELS, PACKAGE_JSON
 
 
-def test_range_point_and_bound_forms() -> None:
-    anchors = RenderPackage.model_validate(PACKAGE_JSON).anchors_by_id()
-    assert format_anchor_value(anchors["lkp-counter-height"]) == "900–950 mm"
-    assert format_anchor_value(anchors["lkp-wardrobe-rod"]) == "2136 mm"
-    assert format_anchor_value(anchors["lkp-passage-main"]) == "不低于 900 mm"
-    assert format_anchor_value(anchors["lkp-price-hydro-labor"]) == "60–68 元/㎡"
+def _anchors() -> dict[str, ReportAnchor]:
+    return RenderPackage.model_validate(copy.deepcopy(PACKAGE_JSON)).anchors_by_id()
 
 
-def test_axis_bound_form() -> None:
-    # 带轴单边界（"前缀边界"，真源=淋浴房内空 {min_w,min_d}）：逐轴出、单位各带
+def _with_value(lkp_id: str, **overrides: Any) -> ReportAnchor:
+    """改一条落点的 valueKind/value/unit 再解析——形态测试用。"""
     pkg = copy.deepcopy(PACKAGE_JSON)
-    pkg["anchors"][0]["value"] = {"min_w": 800, "min_d": 800}
-    anchors = RenderPackage.model_validate(pkg).anchors_by_id()
-    assert format_anchor_value(anchors["lkp-counter-height"]) == "宽不低于 800 mm、深不低于 800 mm"
+    for anchor in pkg["anchors"]:
+        if anchor["lkpId"] == lkp_id:
+            anchor.update(overrides)
+    return RenderPackage.model_validate(pkg).anchors_by_id()[lkp_id]
 
 
-def test_axis_bound_unknown_axis_fails() -> None:
-    pkg = copy.deepcopy(PACKAGE_JSON)
-    pkg["anchors"][0]["value"] = {"min_w": 800, "min_h": 2000}  # 高度轴未登记
-    anchors = RenderPackage.model_validate(pkg).anchors_by_id()
-    with pytest.raises(RenderError, match="值形态不认识"):
-        format_anchor_value(anchors["lkp-counter-height"])
+# ---------------------------------------------------------------------------
+# 整条引用：七类各一
+# ---------------------------------------------------------------------------
+
+
+def test_single_and_range_forms() -> None:
+    anchors = _anchors()
+    # single = 一个匿名项，值是数
+    assert format_anchor_value(anchors["lkp-wardrobe-rod"], ITEM_LABELS) == "2136 mm"
+    # range = 一个匿名项，值是区间；单边界只给一侧
+    assert format_anchor_value(anchors["lkp-counter-height"], ITEM_LABELS) == "900–950 mm"
+    assert format_anchor_value(anchors["lkp-passage-main"], ITEM_LABELS) == "不低于 900 mm"
+    assert format_anchor_value(anchors["lkp-price-hydro-labor"], ITEM_LABELS) == "60–68 元/㎡"
+
+
+def test_scenario_form() -> None:
+    # 分场景（受控词表序）：单位逐项各带
+    assert (
+        format_anchor_value(_anchors()["lkp-illuminance-living"], ITEM_LABELS)
+        == "一般活动 100 lx、书写阅读 300 lx"
+    )
+
+
+def test_tier_form_uses_closed_set_order() -> None:
+    # 档位闭集序 低→中→高，与数据包里的键序（high/low/medium）无关
+    assert (
+        format_anchor_value(_anchors()["lkp-budget-confidence-width"], ITEM_LABELS)
+        == "低档 0.5、中档 0.3、高档 0.15"
+    )
+
+
+def test_dimension_form_keeps_axis_labels() -> None:
+    # 维度闭集（v2.8 前的 min_w/min_d 自造缩写）：轴的中文展示名 + 边界措辞，逐轴出
+    assert (
+        format_anchor_value(_anchors()["lkp-shower-clear"], ITEM_LABELS)
+        == "宽不低于 800 mm、深不低于 800 mm"
+    )
+
+
+def test_component_form_keeps_ratio_verbatim() -> None:
+    # 分项：0.03 原样出，不擅自变 3%（禁换算折算）
+    assert (
+        format_anchor_value(_anchors()["lkp-budget-share"], ITEM_LABELS)
+        == "主材 0.2–0.35、拆改 0.03–0.08"
+    )
+
+
+def test_comparison_form_derives_label_from_tiers() -> None:
+    # 档位比较：项名形态 {高档}-vs-{低档}，展示名由 tier 闭集派生
+    assert (
+        format_anchor_value(_anchors()["lkp-budget-tier-gap"], ITEM_LABELS)
+        == "中档相对低档 1.3–1.8 倍、高档相对中档 1.4–2.2 倍"
+    )
+
+
+# ---------------------------------------------------------------------------
+# 单项引用：只出那一项的值，项名（内部标识符）不出现在输出里
+# ---------------------------------------------------------------------------
+
+
+def test_item_reference_scalar() -> None:
+    anchors = _anchors()
+    assert format_anchor_item(anchors["lkp-illuminance-living"], "reading") == "300 lx"
+    out = replace_placeholders("读书位加亮到 {lkp-illuminance-living.reading}。", anchors)
+    assert out == "读书位加亮到 300 lx。"
+    assert "reading" not in out
+
+
+def test_item_reference_range() -> None:
+    anchors = _anchors()
+    assert format_anchor_item(anchors["lkp-budget-share"], "main-material") == "0.2–0.35"
+    assert format_anchor_item(anchors["lkp-shower-clear"], "width") == "不低于 800 mm"
+
+
+# ---------------------------------------------------------------------------
+# fail loud
+# ---------------------------------------------------------------------------
+
+
+def test_item_reference_on_anonymous_anchor_fails() -> None:
+    # single/range 只有一个匿名项，不存在可引的项
+    anchors = _anchors()
+    with pytest.raises(RenderError, match="没有可引的项名"):
+        format_anchor_item(anchors["lkp-wardrobe-rod"], "value")
+    with pytest.raises(RenderError, match="没有可引的项名"):
+        replace_placeholders("{lkp-counter-height.min}", anchors)
+
+
+def test_unknown_item_name_reports_actual_items() -> None:
+    with pytest.raises(RenderError) as e:
+        format_anchor_item(_anchors()["lkp-illuminance-living"], "vanity")
+    assert "该落点实际有：general、reading" in e.value.details[0]
+
+
+def test_unregistered_item_label_fails() -> None:
+    # 维度闭集外的轴（v2.8 前"高度轴未登记"那条测试的新形态）
+    anchor = _with_value(
+        "lkp-shower-clear", value={"width": {"min": 800}, "ceiling": {"min": 2000}}
+    )
+    with pytest.raises(RenderError, match="未登记展示名"):
+        format_anchor_value(anchor, ITEM_LABELS)
+
+
+def test_malformed_comparison_item_name_fails() -> None:
+    anchor = _with_value("lkp-budget-tier-gap", value={"品质-vs-舒适": {"min": 1.4, "max": 2.2}})
+    with pytest.raises(RenderError, match="不合档位比较形态"):
+        format_anchor_value(anchor, ITEM_LABELS)
 
 
 def test_unknown_value_form_fails_loud() -> None:
-    # 分档映射（如置信→宽度）是设计题不是替换题：内联即违规，必须失败上报。
-    pkg = copy.deepcopy(PACKAGE_JSON)
-    pkg["anchors"][0]["value"] = {"高": 1, "低": 2}
-    anchors = RenderPackage.model_validate(pkg).anchors_by_id()
+    # 项的值是数组（v2.8 前造价占比的真形态）：呈现是设计题不是替换题，失败上报待裁，不猜
+    anchor = _with_value("lkp-budget-share", value={"main-material": [0.2, 0.35]})
     with pytest.raises(RenderError, match="值形态不认识"):
-        format_anchor_value(anchors["lkp-counter-height"])
+        format_anchor_value(anchor, ITEM_LABELS)
 
 
 def test_mixed_keys_fail() -> None:
-    pkg = copy.deepcopy(PACKAGE_JSON)
-    pkg["anchors"][0]["value"] = {"v": 900, "max": 950}
-    anchors = RenderPackage.model_validate(pkg).anchors_by_id()
+    # 元信息挤在 value 里（v2.8 前的 unit/plane 键）：min/max 之外的键即形态不认识
+    anchor = _with_value("lkp-counter-height", value={"min": 900, "max": 950, "unit": "mm"})
     with pytest.raises(RenderError, match="值形态不认识"):
-        format_anchor_value(anchors["lkp-counter-height"])
+        format_anchor_value(anchor, ITEM_LABELS)
+
+
+def test_value_kind_and_shape_must_agree() -> None:
+    with pytest.raises(RenderError, match="声明 valueKind=single"):
+        format_anchor_value(
+            _with_value("lkp-wardrobe-rod", value={"min": 900, "max": 950}), ITEM_LABELS
+        )
+    with pytest.raises(RenderError, match="声明 valueKind=range"):
+        format_anchor_value(_with_value("lkp-counter-height", value=900), ITEM_LABELS)
+    with pytest.raises(RenderError, match="值却不是「项名 → 值」映射"):
+        format_anchor_value(_with_value("lkp-illuminance-living", value=100), ITEM_LABELS)
 
 
 def test_non_numeric_value_fails() -> None:
-    pkg = copy.deepcopy(PACKAGE_JSON)
-    pkg["anchors"][0]["value"] = {"v": "九百"}
-    anchors = RenderPackage.model_validate(pkg).anchors_by_id()
+    anchor = _with_value("lkp-counter-height", value={"min": "九百"})
     with pytest.raises(RenderError, match="非数字"):
-        format_anchor_value(anchors["lkp-counter-height"])
+        format_anchor_value(anchor, ITEM_LABELS)
 
 
 def test_replace_keeps_number_verbatim() -> None:
-    anchors = RenderPackage.model_validate(PACKAGE_JSON).anchors_by_id()
-    out = replace_placeholders("建议 {lkp-counter-height}。", anchors)
+    out = replace_placeholders("建议 {lkp-counter-height}。", _anchors())
     # 原样输出：mm 不折算 m，区间渲染成区间
     assert out == "建议 900–950 mm。"
 
 
 def test_unknown_placeholder_fails_with_all_missing() -> None:
-    anchors = RenderPackage.model_validate(PACKAGE_JSON).anchors_by_id()
     with pytest.raises(RenderError) as e:
-        replace_placeholders("{lkp-ghost-a} 与 {lkp-ghost-b}", anchors)
+        replace_placeholders("{lkp-ghost-a} 与 {lkp-ghost-b.reading}", _anchors())
     assert len(e.value.details) == 2  # 收齐一次报，不是碰到第一个就停

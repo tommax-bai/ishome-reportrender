@@ -13,7 +13,7 @@ from __future__ import annotations
 import html
 from dataclasses import dataclass, field
 
-from reportrender.anchor_text import RenderError, replace_placeholders
+from reportrender.anchor_text import ItemLabels, RenderError, replace_placeholders
 from reportrender.models import Page, ProvenanceNote, RenderPackage, ReportAnchor
 
 # 章题展示名：dom- 域名是内部标识，客户语域用中文章题。未登记的域用原名渲出并记警告
@@ -80,9 +80,13 @@ def _esc(text: str) -> str:
     return html.escape(text, quote=False)
 
 
-def _render_text(text: str, anchors_by_id: dict[str, ReportAnchor]) -> str:
+def _render_text(
+    text: str,
+    anchors_by_id: dict[str, ReportAnchor],
+    item_labels: ItemLabels | None = None,
+) -> str:
     # 先转义再替换：占位符不含转义字符，正文里的标签字符则必须在替换前就地失效。
-    return replace_placeholders(_esc(text), anchors_by_id)
+    return replace_placeholders(_esc(text), anchors_by_id, item_labels)
 
 
 def _provenance_line(note: ProvenanceNote, anchors_by_id: dict[str, ReportAnchor]) -> str:
@@ -105,6 +109,7 @@ def _render_page(
     anchors_by_id: dict[str, ReportAnchor],
     locked_texts: dict[str, str],
     result: RenderResult,
+    item_labels: ItemLabels | None = None,
 ) -> str:
     title = DOMAIN_TITLES.get(page.domain)
     if title is None:
@@ -114,8 +119,8 @@ def _render_page(
     out: list[str] = [f'<section class="sheet chapter"><h2>{_esc(title)}</h2>']
     for card in page.cards:
         out.append('<article class="card">')
-        out.append(f"<h3>{_render_text(card.thesis, anchors_by_id)}</h3>")
-        out.append(f"<p>{_render_text(card.body, anchors_by_id)}</p>")
+        out.append(f"<h3>{_render_text(card.thesis, anchors_by_id, item_labels)}</h3>")
+        out.append(f"<p>{_render_text(card.body, anchors_by_id, item_labels)}</p>")
         out.append("</article>")
         result.card_count += 1
 
@@ -144,12 +149,13 @@ def render_book(
     pages: list[Page],
     package: RenderPackage,
     locked_texts: dict[str, str],
+    item_labels: ItemLabels | None = None,
 ) -> RenderResult:
     """整册渲染。任一页失败即整册失败（RenderError 上抛，与成文线"任一域失败整册失败"同哲学）。"""
     result = RenderResult(html="", page_count=len(pages), card_count=0)
     anchors_by_id = package.anchors_by_id()
 
-    chapters = [_render_page(p, anchors_by_id, locked_texts, result) for p in pages]
+    chapters = [_render_page(p, anchors_by_id, locked_texts, result, item_labels) for p in pages]
 
     toc_items = "".join(f"<li>{_esc(DOMAIN_TITLES.get(p.domain, p.domain))}</li>" for p in pages)
     meta = (

@@ -19,11 +19,13 @@ PACKAGE_JSON: dict[str, Any] = {
     ],
     "anchors": [
         {
-            # 区间形态 + 经验条目（source=None：标注呈现"经验判断"口径，禁编造来源）
+            # range（一个匿名项，值是区间）+ 经验条目（source=None：标注呈现"经验判断"口径，
+            # 禁编造来源）
             "lkpId": "lkp-counter-height",
             "name": "橱柜台面高",
             "numberClass": "selection",
             "unit": "mm",
+            "valueKind": "range",
             "value": {"min": 900, "max": 950},
             "basisTag": "ergonomics@v1",
             "source": None,
@@ -39,11 +41,12 @@ PACKAGE_JSON: dict[str, Any] = {
             "presentation": "REFERENCE_ONLY",
         },
         {
-            # 单边界形态（只 min）+ 已校准国标源
+            # range 的单边界形态（只 min）+ 已校准国标源
             "lkpId": "lkp-passage-main",
             "name": "主通道净宽",
             "numberClass": "analysis",
             "unit": "mm",
+            "valueKind": "range",
             "value": {"min": 900},
             "basisTag": "ergonomics@v1",
             "source": "GB 50352 条文",
@@ -59,12 +62,13 @@ PACKAGE_JSON: dict[str, Any] = {
             "presentation": "THESIS_SUPPORT",
         },
         {
-            # 点值形态
+            # single（一个匿名项，值是数）——v2.8 前是 {"v": 2136} 的壳，现直接是标量
             "lkpId": "lkp-wardrobe-rod",
             "name": "衣柜挂杆高",
             "numberClass": "selection",
             "unit": "mm",
-            "value": {"v": 2136},
+            "valueKind": "single",
+            "value": 2136,
             "basisTag": "ergonomics@v1",
             "source": "行业通行",
             "calibration": "draft",
@@ -79,11 +83,12 @@ PACKAGE_JSON: dict[str, Any] = {
             "presentation": "REFERENCE_ONLY",
         },
         {
-            # 造价形态：区间 + 复合单位 + 时效（第一个会过期的资产形态）
+            # 造价形态：range + 复合单位 + 时效（第一个会过期的资产形态）
             "lkpId": "lkp-price-hydro-labor",
             "name": "水电人工费",
             "numberClass": "analysis",
             "unit": "元/㎡",
+            "valueKind": "range",
             "value": {"min": 60, "max": 68},
             "basisTag": "budget@v2",
             "source": "市场行情采集",
@@ -97,6 +102,120 @@ PACKAGE_JSON: dict[str, Any] = {
                 "annotationRequired": False,
             },
             "presentation": "THESIS_SUPPORT",
+        },
+        {
+            # scenario（多项，各项值是数）：灯光分场景照度——v2.8 前这一形态渲染层直接
+            # fail loud，灯光章出不了册。referencePlane 是 v2.8 从 value 里挪出来的字段。
+            "lkpId": "lkp-illuminance-living",
+            "name": "起居室照度标准值",
+            "numberClass": "selection",
+            "unit": "lx",
+            "valueKind": "scenario",
+            "value": {"general": 100, "reading": 300},
+            "basisTag": "lighting@v2",
+            "source": "GB 50034 表 5.2.1",
+            "calibration": "calibrated",
+            "degraded": False,
+            "provenance": {
+                "source": "GB 50034 表 5.2.1",
+                "effectiveFrom": "2013-05-01",
+                "effectiveTo": None,
+                "calibration": "calibrated",
+                "annotationRequired": False,
+            },
+            "presentation": "THESIS_SUPPORT",
+            "referencePlane": "0.75m 水平面",
+        },
+        {
+            # dimension（多项，各项值是区间的单边界）：v2.8 前的 {min_w, min_d} 自造缩写
+            "lkpId": "lkp-shower-clear",
+            "name": "淋浴房内空",
+            "numberClass": "selection",
+            "unit": "mm",
+            "valueKind": "dimension",
+            "value": {"depth": {"min": 800}, "width": {"min": 800}},
+            "basisTag": "ergonomics@v1",
+            "source": None,
+            "calibration": "draft",
+            "degraded": True,
+            "provenance": {
+                "source": None,
+                "effectiveFrom": None,
+                "effectiveTo": None,
+                "calibration": "draft",
+                "annotationRequired": True,
+            },
+            "presentation": "REFERENCE_ONLY",
+        },
+        {
+            # tier（多项，各项值是数）：档位闭集 low/medium/high
+            "lkpId": "lkp-budget-confidence-width",
+            "name": "置信到区间宽度的映射",
+            "numberClass": "analysis",
+            "unit": None,
+            "valueKind": "tier",
+            "value": {"high": 0.15, "low": 0.5, "medium": 0.3},
+            "basisTag": "budget@v2",
+            "source": None,
+            "calibration": "draft",
+            "degraded": True,
+            "provenance": {
+                "source": None,
+                "effectiveFrom": None,
+                "effectiveTo": None,
+                "calibration": "draft",
+                "annotationRequired": True,
+            },
+            "presentation": "REFERENCE_ONLY",
+        },
+        {
+            # component（多项，各项值是区间）：造价分项占比。项名只用规范/契约点名的两项，
+            # 其余五项待源侧种子改名后进受控词表再补登记（表外项名 fail loud）。
+            "lkpId": "lkp-budget-share",
+            "name": "分项造价占比带",
+            "numberClass": "analysis",
+            "unit": None,
+            "valueKind": "component",
+            "value": {
+                "demolition": {"min": 0.03, "max": 0.08},
+                "main-material": {"min": 0.2, "max": 0.35},
+            },
+            "basisTag": "budget@v2",
+            "source": None,
+            "calibration": "draft",
+            "degraded": True,
+            "provenance": {
+                "source": None,
+                "effectiveFrom": None,
+                "effectiveTo": None,
+                "calibration": "draft",
+                "annotationRequired": True,
+            },
+            "presentation": "REFERENCE_ONLY",
+        },
+        {
+            # comparison（多项，各项值是区间）：档位比较，项名形态 {高档}-vs-{低档}
+            "lkpId": "lkp-budget-tier-gap",
+            "name": "三档情景价差带",
+            "numberClass": "analysis",
+            "unit": "倍",
+            "valueKind": "comparison",
+            "value": {
+                "high-vs-medium": {"min": 1.4, "max": 2.2},
+                "medium-vs-low": {"min": 1.3, "max": 1.8},
+            },
+            "basisTag": "budget@v2",
+            "source": None,
+            "calibration": "draft",
+            "degraded": True,
+            "provenance": {
+                "source": None,
+                "effectiveFrom": None,
+                "effectiveTo": None,
+                "calibration": "draft",
+                "annotationRequired": True,
+            },
+            "presentation": "REFERENCE_ONLY",
         },
     ],
     "withheldAnchors": [],
@@ -147,6 +266,32 @@ PAGES_JSON: list[dict[str, Any]] = [
         ],
     },
     {
+        # 灯光页：整条引用与单项引用同页——单项引用是 v2.8 之前写不出来的写法
+        # （模型只能整条引用，"沙发旁读书那块单独加亮"没有合法记号）。
+        "page_id": "page-lighting",
+        "domain": "lighting",
+        "page_type": None,
+        "cards": [
+            {
+                "thesis": "起居室分场景给光：{lkp-illuminance-living}",
+                "body": "沙发旁的读书位单独加亮到 {lkp-illuminance-living.reading}，"
+                "其余区域维持环境照度 {lkp-illuminance-living.general} 即可。",
+                "number_refs": ["lkp-illuminance-living"],
+                "assertions": [],
+            }
+        ],
+        "locked_text_ids": [],
+        "provenance_notes": [
+            {
+                "lkp_id": "lkp-illuminance-living",
+                "source": "GB 50034 表 5.2.1",
+                "effective_from": "2013-05-01",
+                "effective_to": None,
+                "calibration": "calibrated",
+            }
+        ],
+    },
+    {
         "page_id": "page-budget",
         "domain": "budget",
         "page_type": None,
@@ -177,4 +322,31 @@ LOCKED_TEXTS_JSON: dict[str, str] = {
     "GUIDE_SITE_CHECK": "请在水电交底当天，携带本清单与施工方逐项现场确认并勾选。",
     "DISCLAIM_P1": "本图为点位逻辑示意，标注为相对位置，不含施工坐标。"
     "具体尺寸与定位以现场交底、现场复核为准。本图纸为参考级设计产物，不构成施工指令。",
+}
+
+
+# 落点项名展示名夹具：**照抄 contracts `registries/anchor_items.json` 的 label 列**（开集两类）。
+# 它是测试数据不是第二真源——生产路径由 CLI `--anchor-items` 把那份词表原样传进来，本层不存表。
+ITEM_LABELS: dict[str, dict[str, str]] = {
+    "scenario": {
+        "general": "一般活动",
+        "reading": "书写阅读",
+        "task": "操作台",
+        "vanity": "化妆台",
+    },
+    "component": {
+        "main-material": "主材",
+        "custom-cabinetry": "定制",
+        "demolition": "拆改",
+        "plumbing-electrical": "水电",
+        "painting": "油漆",
+        "masonry-carpentry": "泥木",
+        "soft-furnishing": "软装",
+        "hang": "悬挂",
+        "fold": "叠放",
+        "drawer": "抽屉",
+        "main": "主色",
+        "secondary": "辅色",
+        "accent": "点缀色",
+    },
 }

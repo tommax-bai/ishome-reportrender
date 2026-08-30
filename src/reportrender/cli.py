@@ -13,7 +13,12 @@ from pathlib import Path
 from typing import Any
 
 from reportrender.anchor_text import RenderError
-from reportrender.models import RenderPackage, parse_locked_texts, parse_pages
+from reportrender.models import (
+    RenderPackage,
+    parse_anchor_items,
+    parse_locked_texts,
+    parse_pages,
+)
 from reportrender.render import render_book
 
 
@@ -35,6 +40,15 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="锁定文案数据 JSON（{ID: 正文}）；缺省=全部按待补录缺席",
     )
+    parser.add_argument(
+        "--anchor-items",
+        type=Path,
+        default=None,
+        help=(
+            "落点项名受控词表 JSON（contracts registries/anchor_items.json）："
+            "开集两类（分场景/分项）并列多项时的展示名。缺省=空表，这两类的整条引用即 fail loud"
+        ),
+    )
     parser.add_argument("-o", "--out", type=Path, default=Path("report.html"))
     args = parser.parse_args(argv)
 
@@ -42,7 +56,8 @@ def main(argv: list[str] | None = None) -> int:
         pages = parse_pages(_load_json(args.pages))
         package = RenderPackage.model_validate(_load_json(args.package))
         locked = parse_locked_texts(_load_json(args.locked_texts)) if args.locked_texts else {}
-        result = render_book(pages, package, locked)
+        items = parse_anchor_items(_load_json(args.anchor_items)) if args.anchor_items else {}
+        result = render_book(pages, package, locked, items)
     except RenderError as e:
         print("渲染失败（fail loud，不空替不静默跳过）：", file=sys.stderr)
         for line in e.details:

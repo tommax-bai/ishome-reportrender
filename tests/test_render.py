@@ -11,7 +11,7 @@ from pydantic import ValidationError
 from reportrender.anchor_text import RenderError
 from reportrender.models import RenderPackage, parse_pages
 from reportrender.render import render_book
-from tests.support import LOCKED_TEXTS_JSON, PACKAGE_JSON, PAGES_JSON
+from tests.support import ITEM_LABELS, LOCKED_TEXTS_JSON, PACKAGE_JSON, PAGES_JSON
 
 
 def _render(
@@ -21,18 +21,31 @@ def _render(
 ) -> Any:
     pages = parse_pages(copy.deepcopy(pages_json or PAGES_JSON))
     package = RenderPackage.model_validate(copy.deepcopy(package_json or PACKAGE_JSON))
-    return render_book(pages, package, LOCKED_TEXTS_JSON if locked is None else locked)
+    return render_book(pages, package, LOCKED_TEXTS_JSON if locked is None else locked, ITEM_LABELS)
 
 
 def test_book_renders_cards_with_values() -> None:
     result = _render()
-    assert result.page_count == 2
-    assert result.card_count == 3
+    assert result.page_count == 3
+    assert result.card_count == 4
     assert "900–950 mm" in result.html
     assert "不低于 900 mm" in result.html
     assert "60–68 元/㎡" in result.html
     # 封面基准日来自数据包，不来自时钟
     assert "2026-08-29" in result.html
+
+
+def test_lighting_chapter_renders_whole_and_item_references() -> None:
+    # 灯光分场景照度：v2.8 前本层直接 fail loud，整册出不来
+    html = _render().html
+    assert "一般活动 100 lx、书写阅读 300 lx" in html  # 整条引用
+    assert "读书位单独加亮到 300 lx" in html  # 单项引用：只出值，项名不上纸
+    assert "reading" not in html and "general" not in html
+
+
+def test_reference_plane_stays_off_paper() -> None:
+    # 参考平面本轮解析但不上纸（形态与挂载位待定，见 anchor_text 模块 docstring）
+    assert "0.75m 水平面" not in _render().html
 
 
 def test_no_internal_ids_in_output() -> None:

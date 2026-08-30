@@ -46,19 +46,34 @@ class AnchorProvenance(_PackageModel):
 
 
 class ReportAnchor(_PackageModel):
-    """落点对象：占位符替换的唯一数据源，一个占位符=整条落点（区间渲染成区间，禁换算）。"""
+    """落点对象：占位符替换的唯一数据源。
+
+    **两层模型**（规则 1.9，v2.8）：一条落点 = 若干「项」，一项的值 = 一个数或一个区间。
+    ``value_kind`` 判定 ``value`` 的形态与可否单项引用，**消费侧按它分支、不靠推断键名**；
+    七值闭集照契约镜像成 ``Literal``，第八个值即解析失败（同 ``presentation``）。
+
+    **元信息不进 value**（规则 1.9 二）：单位在 ``unit``、参考平面在 ``reference_plane``——
+    与项同层则 ``{lkp-x.unit}``（引用出一个单位字符串）就是语法上合法的写法，约定管不住。
+    """
 
     lkp_id: str
     name: str
     number_class: str | None = None
     unit: str | None = None
-    value: dict[str, Any]
+    value_kind: Literal[
+        "single", "range", "scenario", "tier", "dimension", "component", "comparison"
+    ]
+    # single = 标量；range = {min,max}；其余五类 = 项名 → 标量 | {min,max}。
+    value: int | float | dict[str, Any]
     basis_tag: str
     source: str | None = None
     calibration: str
     degraded: bool
     provenance: AnchorProvenance | None = None
     presentation: Literal["THESIS_SUPPORT", "REFERENCE_ONLY"]
+    # 参考平面（国标术语，如"0.75m 水平面"）：v2.8 从 value 里挪出来的独立字段。
+    # **本轮解析但不上纸**——形态与挂载位都未定，理由与触发条件见 anchor_text 模块 docstring。
+    reference_plane: str | None = None
 
 
 class ReleaseRef(_PackageModel):
@@ -85,6 +100,15 @@ class RenderPackage(_PackageModel):
     banned_terms_by_domain: dict[str, Any] = {}
     locked_texts_by_domain: dict[str, list[str]] = {}
     anonymous_profile: dict[str, Any] = {}
+    triggered_rules_by_domain: dict[str, Any] = {}
+    """求值线判定的触发规则条目（获客线「户型特征进报告」，contracts 2026-08-30 新增，非必填）。
+
+    **本层声明它但不渲它**：它是给成文线定"讲什么"的输入，纸面上没有它的位置——真要上纸，
+    上的是成文线据它写出的那句话，不是条目本身。声明的理由是 ``extra="forbid"``：顶层字段
+    全集必须齐，少声明一个，整包当场解析失败（本条正是这么被真跑逮到的）。
+
+    后续路径：若将来它要在纸面上单独成节（如"这套户型触发了哪些做法"），触发条件＝成文线在
+    pages 上给出承载位；在那之前本层只认不渲。"""
 
     @field_validator("withheld_anchors")
     @classmethod
@@ -146,6 +170,35 @@ def parse_pages(data: Any) -> list[Page]:
     if not isinstance(data, list):
         raise ValueError("pages 输入须为 Page 数组，或含 pages 键的对象")
     return [Page.model_validate(item) for item in data]
+
+
+def parse_anchor_items(data: Any) -> dict[str, dict[str, str]]:
+    """落点项名展示名解析（contracts ``registries/anchor_items.json`` 的形态）。
+
+    返回 ``{valueKind: {项名: 展示名}}``。**开集两类（scenario/component）的展示名是词表的一列，
+    本层不另存一份**——存两份就是同一条词表两处各写一遍，源侧长出新词而这边忘了改，整册当场渲不出来
+    （同"投影规则两处各写一遍"的既有坑）。闭集两类（tier/dimension）不走本表：它们的取值由规范定死，
+    新增取值本就要改规范，故展示名留在本层代码里。
+
+    缺省 = 空表：开集项名一个都渲不出，整条引用即 fail loud 并报明细。
+    **缺是渲不出，不是猜一个中文名**。
+    """
+    if not isinstance(data, dict):
+        raise ValueError("落点项名词表须为对象")
+    items = data.get("items", data)
+    if not isinstance(items, dict):
+        raise ValueError("落点项名词表缺 items")
+    out: dict[str, dict[str, str]] = {}
+    for kind, entries in items.items():
+        if kind.startswith("$") or not isinstance(entries, dict):
+            continue
+        table: dict[str, str] = {}
+        for name, body in entries.items():
+            label = body.get("label") if isinstance(body, dict) else body
+            if isinstance(label, str) and label:
+                table[name] = label
+        out[kind] = table
+    return out
 
 
 def parse_locked_texts(data: Any) -> dict[str, str]:
