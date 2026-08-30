@@ -39,9 +39,10 @@ def test_single_and_range_forms() -> None:
     anchors = _anchors()
     # single = 一个匿名项，值是数
     assert format_anchor_value(anchors["lkp-wardrobe-rod"], ITEM_LABELS) == "2136 mm"
-    # range = 一个匿名项，值是区间；单边界只给一侧
+    # range = 一个匿名项，值是区间；**只给一侧时出裸值**——一个记号只渲一个值，
+    # 写手的句子就在它旁边，边界说法归句子（用户裁决 2026-08-30）
     assert format_anchor_value(anchors["lkp-counter-height"], ITEM_LABELS) == "900–950 mm"
-    assert format_anchor_value(anchors["lkp-passage-main"], ITEM_LABELS) == "不低于 900 mm"
+    assert format_anchor_value(anchors["lkp-passage-main"], ITEM_LABELS) == "900 mm"
     assert format_anchor_value(anchors["lkp-price-hydro-labor"], ITEM_LABELS) == "60–68 元/㎡"
 
 
@@ -62,7 +63,11 @@ def test_tier_form_uses_closed_set_order() -> None:
 
 
 def test_dimension_form_keeps_axis_labels() -> None:
-    # 维度闭集（v2.8 前的 min_w/min_d 自造缩写）：轴的中文展示名 + 边界措辞，逐轴出
+    """并列多项**仍由本层带边界措辞**：句子够不着一个记号里面的每一项。
+
+    与上面单值场合出裸值对照——同一条纪律的两侧（用户裁决 2026-08-30："在输入的地方给出
+    需要填的值的特征"，而并列场合写手无从逐项给特征）。
+    """
     assert (
         format_anchor_value(_anchors()["lkp-shower-clear"], ITEM_LABELS)
         == "宽不低于 800 mm、深不低于 800 mm"
@@ -101,7 +106,8 @@ def test_item_reference_scalar() -> None:
 def test_item_reference_range() -> None:
     anchors = _anchors()
     assert format_anchor_item(anchors["lkp-budget-share"], "main-material") == "0.2–0.35"
-    assert format_anchor_item(anchors["lkp-shower-clear"], "width") == "不低于 800 mm"
+    # 按项引用＝一个记号只渲一个值，句子够得着 → 裸值
+    assert format_anchor_item(anchors["lkp-shower-clear"], "width") == "800 mm"
 
 
 # ---------------------------------------------------------------------------

@@ -29,7 +29,7 @@ def test_book_renders_cards_with_values() -> None:
     assert result.page_count == 3
     assert result.card_count == 4
     assert "900–950 mm" in result.html
-    assert "不低于 900 mm" in result.html
+    assert "900 mm" in result.html  # 只给一侧的值出裸值，边界说法由句子写
     assert "60–68 元/㎡" in result.html
     # 封面基准日来自数据包，不来自时钟
     assert "2026-08-29" in result.html

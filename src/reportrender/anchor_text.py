@@ -24,7 +24,7 @@
 valueKind    形态                                    例
 ===========  =====================================  ==========================
 single       ``值``                                  ``2136 mm``
-range        ``值``（区间/单边界）                    ``900–950 mm``
+range        ``值``（区间；只给一侧时出裸值）          ``900–950 mm`` / ``3 种``
 scenario     ``标签 值`` 顿号并列                     ``一般活动 100 lx、阅读 300 lx``
 tier         同上（闭集序 低→中→高）                  ``低档 0.5、中档 0.3、高档 0.15``
 dimension    同上（闭集序 宽→深→高）                  ``宽不低于 800 mm、深不低于 800 mm``
@@ -32,9 +32,19 @@ component    同上（词表登记序）                       ``主材 0.2–0.
 comparison   ``高档相对低档 值``（档名取自 tier 闭集）  ``高档相对中档 1.4–2.2 倍``
 ===========  =====================================  ==========================
 
-单边界的措辞定为"不低于/不超过"（渲染的是边界语义，不是造数字）；多项并列时**单位逐项各带**
-（沿用带轴单边界的既有形态），并列顺序取**登记表内的顺序**，不取数据包里的键序——键序是
-序列化的偶然，登记序是确定的。
+**只给一侧的值，边界说法归谁写，按"句子够不够得着"分**（用户裁决 2026-08-30，覆盖 8-29 晚
+"单边界措辞归渲染层"的一半）：
+
+- **一个记号只渲一个值**（整条引用匿名项、或按项引用其中一项）→ 写手的句子就在记号旁边，
+  本层**出裸值**（``3 种``），句子里必须写方向正确的边界词，成文线机检该写没写、写反没写反。
+  这么改的起因：本层带词时，写手那句话的语法主干正好落在洞里，十二跑里九跑它照样自己写了
+  一遍边界词，成品叠字（``不能多于 不超过 3 种 种``）。
+- **一个记号并列多项**（``dimension`` 等，如淋浴净尺寸宽/深各只给下限）→ 句子够不着里面的
+  每一项，本层**逐项带词**（``宽不低于 800 mm、深不低于 800 mm``），此时写手不写、也不许写。
+
+单位**不随此变**：单位永远由本层随值出（用户裁决 2026-08-30）——写错单位会改掉这个数的大小，
+而边界词不会，两者可核性不同。多项并列时单位逐项各带；并列顺序取**登记表内的顺序**，不取数据包
+里的键序——键序是序列化的偶然，登记序是确定的。
 
 参考平面（``referencePlane``，规则 1.9 二把它从 ``value`` 里挪出来了）**本轮不上纸**，理由与
 后续路径见交接文档追记：真数据里它仍是"多项挤一串"的复合字符串（``一般活动 0.75m 水平面；
@@ -57,7 +67,10 @@ ITEM_NAME_RE = re.compile(r"^[a-z][a-z0-9-]*$")
 
 # 一项的值只有两种形态：一个数，或一个区间（单边界只给一侧）。
 _BOUND_KEYS = frozenset({"min", "max"})
-_BOUND_PHRASES = ("不低于", "不超过")
+# 只给一侧时的措辞。**只在并列多项时由本层出**（见 :func:`_fmt_value` 的 ``carry_bound``）——
+# 一个记号只渲一个值的场合，边界说法由写手的句子写，本层出裸值。
+_BOUND_PHRASE_BY_SIDE = {"min": "不低于", "max": "不超过"}
+_BOUND_PHRASES = tuple(_BOUND_PHRASE_BY_SIDE.values())
 
 # 只有一个匿名项的两类：没有可引的项名，按项引用即 fail loud。
 _ANONYMOUS_KINDS = frozenset({"single", "range"})
@@ -101,8 +114,14 @@ def _fmt_num(x: object, ref: str) -> str:
     return str(x)
 
 
-def _fmt_value(value: object, unit: str | None, ref: str) -> str:
-    """一项的值 → 文字（含单位）。标量与区间之外一律 fail loud。"""
+def _fmt_value(value: object, unit: str | None, ref: str, carry_bound: bool = False) -> str:
+    """一项的值 → 文字（含单位）。标量与区间之外一律 fail loud。
+
+    ``carry_bound`` = 这一处的边界说法要不要由本层带上（"不低于 800 mm" 还是裸的 "800 mm"）。
+    判据是**句子够不够得着**（用户裁决 2026-08-30）：一个记号只渲出一个值时，写手的句子就在
+    它旁边，边界说法归写手（本层出裸值）；一个记号并列多项时，句子够不着里面的每一项，
+    只能由本层逐项带上。表格与图框将来同理——那里"旁边"指列头，届时各配各的机检。
+    """
     if isinstance(value, dict):
         keys = set(value)
         if not keys or not keys <= _BOUND_KEYS:
@@ -114,10 +133,10 @@ def _fmt_value(value: object, unit: str | None, ref: str) -> str:
             )
         if keys == _BOUND_KEYS:
             text = f"{_fmt_num(value['min'], ref)}–{_fmt_num(value['max'], ref)}"
-        elif keys == {"min"}:
-            text = f"不低于 {_fmt_num(value['min'], ref)}"
         else:
-            text = f"不超过 {_fmt_num(value['max'], ref)}"
+            side = "min" if keys == {"min"} else "max"
+            number = _fmt_num(value[side], ref)
+            text = f"{_BOUND_PHRASE_BY_SIDE[side]} {number}" if carry_bound else number
     elif isinstance(value, bool) or not isinstance(value, int | float):
         raise RenderError(
             [
@@ -184,7 +203,7 @@ def format_anchor_value(anchor: ReportAnchor, item_labels: ItemLabels | None = N
             raise RenderError([f"{ref} 声明 valueKind=single，值却不是一个数：{value!r}"])
         if kind == "range" and not isinstance(value, dict):
             raise RenderError([f"{ref} 声明 valueKind=range，值却不是一个区间：{value!r}"])
-        return _fmt_value(value, anchor.unit, ref)
+        return _fmt_value(value, anchor.unit, ref)  # 单值场合：边界说法归写手
 
     if not isinstance(value, dict) or not value:
         raise RenderError(
@@ -194,8 +213,11 @@ def format_anchor_value(anchor: ReportAnchor, item_labels: ItemLabels | None = N
     labels = item_labels or {}
     items = [(*_item_display(kind, name, ref, labels), name, v) for name, v in value.items()]
     items.sort(key=lambda row: row[0])
+    # 并列场合：句子够不着里面的每一项，边界说法只能由本层逐项带上
     return "、".join(
-        _with_label(label, _fmt_value(item_value, anchor.unit, f"{ref} 的项 {name!r}"))
+        _with_label(
+            label, _fmt_value(item_value, anchor.unit, f"{ref} 的项 {name!r}", carry_bound=True)
+        )
         for _order, label, name, item_value in items
     )
 
