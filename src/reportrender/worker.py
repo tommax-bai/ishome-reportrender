@@ -25,7 +25,7 @@ from temporalio.worker import Worker
 
 from reportrender.activities import ReportBookRenderer, activity_registry
 from reportrender.anchor_text import ItemLabels
-from reportrender.book_store import OssBookStore, OssSettings
+from reportrender.book_store import BookStoreError, OssBookStore, OssSettings
 from reportrender.models import parse_anchor_items, parse_locked_texts
 
 GENPIPE_NAMESPACE = "genpipe"
@@ -63,7 +63,11 @@ def _load_registries() -> tuple[dict[str, str], ItemLabels]:
 
 async def run_worker(temporal_address: str) -> None:
     locked_texts, item_labels = _load_registries()
-    store = OssBookStore(OssSettings.from_env())
+    try:
+        store = OssBookStore(OssSettings.from_env())
+    except BookStoreError as e:
+        # 缺配置是**运维要看的一句话**，不是给开发看的调用栈：起不来的原因要一眼读得懂。
+        raise SystemExit("；".join(e.details)) from None
     renderer = ReportBookRenderer(store, locked_texts, item_labels)
     client = await Client.connect(temporal_address, namespace=GENPIPE_NAMESPACE)
     worker = Worker(

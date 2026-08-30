@@ -119,3 +119,30 @@ def test_report_id_that_cannot_be_a_key_fails_loud() -> None:
     """report_id 带斜杠会把对象写到别处去——响亮失败，不悄悄改写它。"""
     with pytest.raises(BookStoreError):
         book_key_of("../../etc/passwd")
+
+
+def test_worker_says_in_one_line_why_it_cannot_start(monkeypatch: pytest.MonkeyPatch) -> None:
+    """起不来的原因要**一眼读得懂**：缺配置是运维看的一句话，不是给开发看的调用栈。
+
+    这条盯的是形态不是文案——起不来时抛 SystemExit 带一句人话，而不是让 BookStoreError
+    或 KeyError 带着调用栈冒到终端。缺配置在部署现场是最常见的一种"起不来"。
+    """
+    from reportrender import worker
+
+    monkeypatch.delenv(worker.REGISTRIES_DIR_ENV, raising=False)
+    with pytest.raises(SystemExit) as failure:
+        worker._load_registries()  # noqa: SLF001
+    assert worker.REGISTRIES_DIR_ENV in str(failure.value)
+
+
+def test_worker_names_the_missing_registry_file(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Any
+) -> None:
+    """目录指错时说出缺的是哪几个文件——"不是 contracts 的 registries 目录？"是最常见的原因。"""
+    from reportrender import worker
+
+    monkeypatch.setenv(worker.REGISTRIES_DIR_ENV, str(tmp_path))
+    with pytest.raises(SystemExit) as failure:
+        worker._load_registries()  # noqa: SLF001
+    assert worker.LOCKED_TEXTS_FILE in str(failure.value)
+    assert worker.ANCHOR_ITEMS_FILE in str(failure.value)
