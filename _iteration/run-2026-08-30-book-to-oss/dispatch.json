@@ -1,0 +1,13 @@
+{
+  "domains": ["lighting"],
+  "entitlement": "PAID",
+  "anonymousProfile": {
+    "chiefHeightMm": 1700,
+    "tallestHeightMm": 1780,
+    "eyeHeightMm": 1600,
+    "tvScreenHeightMm": 600,
+    "layoutFeatures": {"balcony_service": "阳台区域画有洗衣机与柜体示意虚线框，表明设家政功能位"},
+    "cityTier": "一线"
+  },
+  "lockedTextsByArtifact": {}
+}
