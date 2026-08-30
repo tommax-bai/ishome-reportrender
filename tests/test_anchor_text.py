@@ -38,12 +38,13 @@ def _with_value(lkp_id: str, **overrides: Any) -> ReportAnchor:
 def test_single_and_range_forms() -> None:
     anchors = _anchors()
     # single = 一个匿名项，值是数
-    assert format_anchor_value(anchors["lkp-wardrobe-rod"], ITEM_LABELS) == "2136 mm"
+    # 单值场合出**裸数**：单位由写手照抄下发的那个字（用户裁决 2026-08-30 晚）
+    assert format_anchor_value(anchors["lkp-wardrobe-rod"], ITEM_LABELS) == "2136"
     # range = 一个匿名项，值是区间；**只给一侧时出裸值**——一个记号只渲一个值，
     # 写手的句子就在它旁边，边界说法归句子（用户裁决 2026-08-30）
-    assert format_anchor_value(anchors["lkp-counter-height"], ITEM_LABELS) == "900–950 mm"
-    assert format_anchor_value(anchors["lkp-passage-main"], ITEM_LABELS) == "900 mm"
-    assert format_anchor_value(anchors["lkp-price-hydro-labor"], ITEM_LABELS) == "60–68 元/㎡"
+    assert format_anchor_value(anchors["lkp-counter-height"], ITEM_LABELS) == "900–950"
+    assert format_anchor_value(anchors["lkp-passage-main"], ITEM_LABELS) == "900"
+    assert format_anchor_value(anchors["lkp-price-hydro-labor"], ITEM_LABELS) == "60–68"
 
 
 def test_scenario_form() -> None:
@@ -97,8 +98,8 @@ def test_comparison_form_derives_label_from_tiers() -> None:
 
 def test_item_reference_scalar() -> None:
     anchors = _anchors()
-    assert format_anchor_item(anchors["lkp-illuminance-living"], "reading") == "300 lx"
-    out = replace_placeholders("读书位加亮到 {lkp-illuminance-living.reading}。", anchors)
+    assert format_anchor_item(anchors["lkp-illuminance-living"], "reading") == "300"
+    out = replace_placeholders("读书位加亮到 {lkp-illuminance-living.reading} lx。", anchors)
     assert out == "读书位加亮到 300 lx。"
     assert "reading" not in out
 
@@ -106,8 +107,8 @@ def test_item_reference_scalar() -> None:
 def test_item_reference_range() -> None:
     anchors = _anchors()
     assert format_anchor_item(anchors["lkp-budget-share"], "main-material") == "0.2–0.35"
-    # 按项引用＝一个记号只渲一个值，句子够得着 → 裸值
-    assert format_anchor_item(anchors["lkp-shower-clear"], "width") == "800 mm"
+    # 按项引用＝一个记号只渲一个值，句子够得着 → 裸数（边界说法与单位都归句子）
+    assert format_anchor_item(anchors["lkp-shower-clear"], "width") == "800"
 
 
 # ---------------------------------------------------------------------------
@@ -177,8 +178,8 @@ def test_non_numeric_value_fails() -> None:
 
 
 def test_replace_keeps_number_verbatim() -> None:
-    out = replace_placeholders("建议 {lkp-counter-height}。", _anchors())
-    # 原样输出：mm 不折算 m，区间渲染成区间
+    out = replace_placeholders("建议 {lkp-counter-height} mm。", _anchors())
+    # 原样输出：mm 不折算 m，区间渲染成区间；单位是写手写的那个字，本层不碰
     assert out == "建议 900–950 mm。"
 
 

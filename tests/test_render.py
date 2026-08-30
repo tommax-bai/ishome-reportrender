@@ -28,9 +28,9 @@ def test_book_renders_cards_with_values() -> None:
     result = _render()
     assert result.page_count == 3
     assert result.card_count == 4
-    assert "900–950 mm" in result.html
-    assert "900 mm" in result.html  # 只给一侧的值出裸值，边界说法由句子写
-    assert "60–68 元/㎡" in result.html
+    # 单值场合只出数：边界说法与单位都在写手那句话里（用户裁决 2026-08-30 晚）
+    assert "900–950" in result.html
+    assert "60–68" in result.html
     # 封面基准日来自数据包，不来自时钟
     assert "2026-08-29" in result.html
 
@@ -39,7 +39,7 @@ def test_lighting_chapter_renders_whole_and_item_references() -> None:
     # 灯光分场景照度：v2.8 前本层直接 fail loud，整册出不来
     html = _render().html
     assert "一般活动 100 lx、书写阅读 300 lx" in html  # 整条引用
-    assert "读书位单独加亮到 300 lx" in html  # 单项引用：只出值，项名不上纸
+    assert "读书位单独加亮到 300 lx" in html  # 单项引用：本层出 300，lx 是写手写的
     assert "reading" not in html and "general" not in html
 
 

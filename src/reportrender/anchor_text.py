@@ -115,12 +115,19 @@ def _fmt_num(x: object, ref: str) -> str:
 
 
 def _fmt_value(value: object, unit: str | None, ref: str, carry_bound: bool = False) -> str:
-    """一项的值 → 文字（含单位）。标量与区间之外一律 fail loud。
+    """一项的值 → 文字。标量与区间之外一律 fail loud。
 
-    ``carry_bound`` = 这一处的边界说法要不要由本层带上（"不低于 800 mm" 还是裸的 "800 mm"）。
-    判据是**句子够不够得着**（用户裁决 2026-08-30）：一个记号只渲出一个值时，写手的句子就在
-    它旁边，边界说法归写手（本层出裸值）；一个记号并列多项时，句子够不着里面的每一项，
-    只能由本层逐项带上。表格与图框将来同理——那里"旁边"指列头，届时各配各的机检。
+    ``carry_bound`` = 这一处的**边界说法与单位**要不要由本层带上（``不低于 800 mm`` 还是裸的
+    ``800``）。判据是**句子够不够得着**（用户裁决 2026-08-30）：
+
+    - 一个记号只渲出一个值 → 写手的句子就在它旁边，**边界说法与单位都由写手写**，本层只出数。
+      单位不是写手自己想的：它逐字写在下发给写手的那一行上（``你写：…不超过 {lkp-x} 种。``），
+      写手照抄，机检逐字比对这条落点的 ``unit``——**单位仍由数据决定，写手只是搬运**。
+      这么分的理由是"不超过三种"在中文里是**一个词组**，所有权的线划在词组中间，接缝处必漏
+      （真跑：单位违规 0/12 → 2/6）。
+    - 一个记号并列多项 → 句子够不着里面的每一项，边界说法与单位**只能由本层逐项带上**。
+
+    表格与图框将来同理——那里"旁边"指列头，届时各配各的机检。
     """
     if isinstance(value, dict):
         keys = set(value)
@@ -146,7 +153,9 @@ def _fmt_value(value: object, unit: str | None, ref: str, carry_bound: bool = Fa
         )
     else:
         text = _fmt_num(value, ref)
-    return f"{text} {unit}" if unit else text
+    # 单位只在并列场合由本层出（同 carry_bound：句子够不着里面的每一项）；
+    # 单值场合出裸数，单位由写手照抄下发的那个字。
+    return f"{text} {unit}" if unit and carry_bound else text
 
 
 def _item_display(

@@ -234,15 +234,17 @@ PAGES_JSON: list[dict[str, Any]] = [
         "page_type": None,
         "cards": [
             {
-                "thesis": "台面高度按主要下厨者身高定制，建议 {lkp-counter-height}",
-                "body": "以 1620 mm 身高推算，台面做到 {lkp-counter-height} 更省腰；"
-                "主通道保持 {lkp-passage-main} 以保证通行。",
+                # 单位写在记号后面（用户裁决 2026-08-30 晚）：本层只出数，单位是写手照抄
+                # 下发给它的那个字，机检逐字比对这条落点的 unit——单位仍由数据决定
+                "thesis": "台面高度按主要下厨者身高定制，建议 {lkp-counter-height} mm",
+                "body": "以 1620 mm 身高推算，台面做到 {lkp-counter-height} mm 更省腰；"
+                "主通道不低于 {lkp-passage-main} mm 以保证通行。",
                 "number_refs": ["lkp-counter-height", "lkp-passage-main"],
                 "assertions": [],
             },
             {
-                "thesis": "挂杆高度建议 {lkp-wardrobe-rod}",
-                "body": "常用挂衣区设在 {lkp-wardrobe-rod} 附近，取放不需踮脚。",
+                "thesis": "挂杆高度建议 {lkp-wardrobe-rod} mm",
+                "body": "常用挂衣区设在 {lkp-wardrobe-rod} mm 附近，取放不需踮脚。",
                 "number_refs": ["lkp-wardrobe-rod"],
                 "assertions": [],
             },
@@ -274,8 +276,8 @@ PAGES_JSON: list[dict[str, Any]] = [
         "cards": [
             {
                 "thesis": "起居室分场景给光：{lkp-illuminance-living}",
-                "body": "沙发旁的读书位单独加亮到 {lkp-illuminance-living.reading}，"
-                "其余区域维持环境照度 {lkp-illuminance-living.general} 即可。",
+                "body": "沙发旁的读书位单独加亮到 {lkp-illuminance-living.reading} lx，"
+                "其余区域维持环境照度 {lkp-illuminance-living.general} lx 即可。",
                 "number_refs": ["lkp-illuminance-living"],
                 "assertions": [],
             }
