@@ -111,10 +111,16 @@ def test_withheld_anchors_nonempty_rejected() -> None:
 
 
 def test_unmapped_domain_renders_with_warning() -> None:
+    """未登记的域用原名渲出并记警告（不 fail）——新域先能读，展示名补表跟上。
+
+    样例域名 2026-08-31 从 `storage` 换成一个确实没登记的：那次六章整册真跑暴露出
+    material/softdeco/storage 三个**正在用的**域一直没进 DOMAIN_TITLES，目录里直接把内部域名
+    印给了业主。补表后 `storage` 不再是反例，判据本身不变——**换的是样例不是口径**。
+    """
     pages = copy.deepcopy(PAGES_JSON)
-    pages[1]["domain"] = "storage"
+    pages[1]["domain"] = "acoustics"
     result = _render(pages_json=pages)
-    assert any("storage" in w for w in result.warnings)
+    assert any("acoustics" in w for w in result.warnings)
 
 
 def test_package_accepts_producer_side_fields_it_does_not_render() -> None:

@@ -22,6 +22,13 @@ DOMAIN_TITLES = {
     "ergonomics": "人体工学",
     "lighting": "灯光",
     "budget": "造价",
+    # 2026-08-31 补：第一次六章整册真跑，目录里 material/softdeco/storage 三章**直接把内部域名印给了
+    # 业主**——这三个正在用的域一直没登记，表里反倒有 hydro/acceptance/quotation 三个当前不用的。
+    # 上面那句"未登记的域用原名渲出并记警告（不 fail）"是对的宽容降级，但降级结果读者看得见，
+    # 所以登记表要跟着在用的域走。中文名由用户定（软装 / 材质 / 收纳）。
+    "material": "材质",
+    "softdeco": "软装",
+    "storage": "收纳",
     "hydro": "水电",
     "acceptance": "验收",
     "quotation": "报价",
