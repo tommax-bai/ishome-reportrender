@@ -115,3 +115,17 @@ def test_unmapped_domain_renders_with_warning() -> None:
     pages[1]["domain"] = "storage"
     result = _render(pages_json=pages)
     assert any("storage" in w for w in result.warnings)
+
+
+def test_package_accepts_producer_side_fields_it_does_not_render() -> None:
+    """生产侧新加的顶层字段必须**认得下**，哪怕本层不渲它。
+
+    ``extra="forbid"`` 是匿名守卫（多一个字段就可能多一条用户信息），代价是**少声明一个，
+    整包当场解析失败**。真跑立案两次：`triggered_rules_by_domain`（2026-08-30 早）与
+    `banned_term_groups_by_domain`（2026-08-30 晚）——后者那次两跑成文已经过了、死在渲染这一步。
+    """
+    package = copy.deepcopy(PACKAGE_JSON)
+    package["bannedTermGroupsByDomain"] = {"lighting": {"weak": ["可能"]}}
+    package["triggeredRulesByDomain"] = {"lighting": []}
+    parsed = RenderPackage.model_validate(package)
+    assert parsed.banned_term_groups_by_domain == {"lighting": {"weak": ["可能"]}}

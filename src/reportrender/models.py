@@ -98,6 +98,15 @@ class RenderPackage(_PackageModel):
     personas_by_domain: dict[str, Any] = {}
     checks_by_domain: dict[str, Any] = {}
     banned_terms_by_domain: dict[str, Any] = {}
+    banned_term_groups_by_domain: dict[str, Any] = {}
+    """禁词按「为什么禁」分组（contracts 2026-08-30 新增，非必填）。
+
+    **本层声明它但不渲它**，理由同 ``triggered_rules_by_domain``：它是给成文线分句打回话用的，
+    纸面上没有它的位置。声明的理由是 ``extra="forbid"``——顶层字段全集必须齐，少声明一个整包
+    当场解析失败（本条同样是被真跑逮到的：生产侧一加字段，两跑成文过了却死在渲染）。
+
+    后续路径：本层永远不渲它——除非将来纸面上要出现"这份报告避开了哪些说法"这类元信息，
+    而那与"报告不谈自己怎么来的"相抵触，故实际上是**恒不渲**。"""
     locked_texts_by_domain: dict[str, list[str]] = {}
     anonymous_profile: dict[str, Any] = {}
     triggered_rules_by_domain: dict[str, Any] = {}
