@@ -76,11 +76,23 @@ def test_dimension_form_keeps_axis_labels() -> None:
 
 
 def test_component_form_keeps_ratio_verbatim() -> None:
-    # 分项：0.03 原样出，不擅自变 3%（禁换算折算）
+    # 分项：0.03 原样出，不擅自变 3%（禁换算折算）。
+    # **本仓夹具刻意不跟着改源那一批走**：真种子 2026-08-31 已改成百分数（80 + unit %），
+    # 而这条断言守的是"本层不许自己换算"——留一条小数在这儿，换算真发生了它当场红。
     assert (
         format_anchor_value(_anchors()["lkp-budget-share"], ITEM_LABELS)
         == "主材 0.2–0.35、拆改 0.03–0.08"
     )
+
+
+def test_percent_unit_sits_against_the_number() -> None:
+    """符号类单位紧排：``60%`` 不是 ``60 %``；中文单位照旧留一格（见上面几条）。
+
+    这是**排版不是换算**——值一个字没动。判据与射程（当前只到 ``%``）在
+    :func:`reportrender.anchor_text.join_unit` 的注释里。
+    """
+    anchor = _with_value("lkp-budget-share", unit="%", value={"main-material": 20, "demolition": 3})
+    assert format_anchor_value(anchor, ITEM_LABELS) == "主材 20%、拆改 3%"
 
 
 def test_comparison_form_derives_label_from_tiers() -> None:

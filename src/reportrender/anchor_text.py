@@ -114,6 +114,20 @@ def _fmt_num(x: object, ref: str) -> str:
     return str(x)
 
 
+# 符号类单位紧排（用户裁决 2026-08-31，随"比率改百分数"同批）：中文单位与数之间留一格
+# （``3 种``），``%`` 不留（``80%`` 不是 ``80 %``）。**这是排版不是换算**——一个数都没动，
+# 红线第 3 条管的是"渲染层自己造数字"，这里没有第二个数被造出来。
+# 用闭集登记而不用"是不是 ASCII 符号"一类字符规则：表外的一律照旧留空格，要加一个就得裁一次
+# （同项名闭集的处置）。**射程只到 ``%``**：``°`` 同型（``45 °`` 同样该紧排），本次不动——
+# 触发条件写死＝**下次真有落点用 ``°`` 印进正文时一并改**（今天 ``°`` 只在灯光域光束角，未进正文）。
+_TIGHT_UNITS = {"%"}
+
+
+def join_unit(text: str, unit: str) -> str:
+    """值 + 单位拼成一段文字。本仓与 reportgen 的下发行各有一份实现，两处都改才算改完。"""
+    return f"{text}{unit}" if unit in _TIGHT_UNITS else f"{text} {unit}"
+
+
 def _fmt_value(value: object, unit: str | None, ref: str, carry_bound: bool = False) -> str:
     """一项的值 → 文字。标量与区间之外一律 fail loud。
 
@@ -155,7 +169,7 @@ def _fmt_value(value: object, unit: str | None, ref: str, carry_bound: bool = Fa
         text = _fmt_num(value, ref)
     # 单位只在并列场合由本层出（同 carry_bound：句子够不着里面的每一项）；
     # 单值场合出裸数，单位由写手照抄下发的那个字。
-    return f"{text} {unit}" if unit and carry_bound else text
+    return join_unit(text, unit) if unit and carry_bound else text
 
 
 def _item_display(
